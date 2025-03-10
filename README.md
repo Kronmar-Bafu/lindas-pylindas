@@ -185,6 +185,8 @@ This is a first implementation of:
 
 See the folder `pylindas/shared_dimension_queries` and its [README](pylindas/shared_dimension_queries/README.md) for detailed explanation
 
+Shared dimensions work only in Python >=3.11
+
 About generating Shared Dimension, see here under.
 
 ## About concept tables and multi-lingual concepts
@@ -202,5 +204,7 @@ See the folder `example/Cubes/concept_table_airport` and its [README](example/Cu
 This is a first implementation to generate a shared dimension, following an approach similar to pyCube, but to transform a .csv file to the corresponding RDF.  
 
 See the folder `pylindas/pyshareddimension` and its [README](pylindas/pyshareddimension/README.md) for detailed explanation
+
+Shared dimensions work only in Python >=3.11
 
 
