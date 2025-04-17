@@ -2,6 +2,7 @@
 # If the SD URL starts with http, it will instead use that instead of the default
 # Note: a SD's URL is not relative to the LINDAS environment, and it will be dereferenceable only when published on PROD
 Identifier: pylindas_sd_generation_example
+# TODO Base: Optional, allows for separation of DefinedTermSet and the base for identifier-field, where identifier defines the TermSet
 Name:
   en: PyLindas Shared Dimension generation example
   fr: PyLindas example de génération d'une Shared Dimension 

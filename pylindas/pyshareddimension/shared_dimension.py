@@ -15,7 +15,7 @@ import sys
 
 from pylindas.lindas.namespaces import *
 from pylindas.lindas.query import query_lindas
-from pyshacl import validate
+from pyshacl import validate, errors
 
 class SharedDimension:
     _sd_uri: URIRef # Note: Shared Dimension usually do not have a trailing "/" in there URL
@@ -172,11 +172,15 @@ class SharedDimension:
             None
         """
         termIdentifierField = self._sd_dict.get("Terms").get("identifier-field")
-
+        base = self._sd_dict.get("Base")
         # Note: Shared Dimension usually do not have a trailing "/" in there URL
         #   -> add it 
         def make_iri(row):
-            return self._sd_uri + "/" + quote(str(row[termIdentifierField]))
+            # allows for a different DefinedTermSet URI, only if base is declared
+            if base:
+                return base + "/" + quote(str(row[termIdentifierField]))
+            else:
+                return self._sd_uri + "/" + quote(str(row[termIdentifierField]))
         self._dataframe['terms-uri'] = self._dataframe.apply(
             make_iri, axis=1
         )
@@ -454,4 +458,4 @@ class SharedDimension:
         if valid_sd:
             return True, "Shared dimension basics are met."
         else:
-            return False, text_sd
+            raise ValueError(text_sd)
