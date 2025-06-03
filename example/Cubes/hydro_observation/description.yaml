@@ -1,0 +1,150 @@
+Name:
+  de: Tägliche Abflussmittel - August 2024
+  fr:
+  it:
+  en:
+Description:
+  de: Die täglichen Abflussmittel nach Station im August 2024
+  fr:
+  it:
+  en:
+Publisher:
+  - IRI: https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu
+Creator:
+  - IRI: https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu
+Contributor:
+  - IRI: https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu
+    Name: Bundesamt für Umwelt
+Date Created:
+  2025-02-25
+Contact Point:
+  E-Mail: info@bafu.admin.ch
+  Name: Bundesamt für Umwelt
+Base-URI: https://environment.ld.admin.ch/foen/hydro/daily/
+Identifier: UZ-2404
+Version: 1
+Work Status:
+  Draft
+Visualize:
+  True
+# Optional but recommended
+Accrual Periodicity: irregular
+
+Namespace: biotop
+
+dimensions:
+  Typ:
+    name:
+      de: Art des Biotops
+      fr: Art des Biotops
+      it: Art des Biotops
+      en: Art des Biotops
+    description:
+      de: Die Art des Biotopes nach denen in der Biotopstatistik unterschieden wird
+    dimension-type: Key Dimension
+    datatype: URI
+    scale-type: nominal
+    path: type
+    mapping:
+      type: replace
+      replacements:
+        Hochmoore (Typen I + II): https://environment.ld.admin.ch/foen/biotopes/1
+        Flachmoore: https://environment.ld.admin.ch/foen/biotopes/2
+        Auengebiete: https://environment.ld.admin.ch/foen/biotopes/3
+        Amphibienlaichgebiete: https://environment.ld.admin.ch/foen/biotopes/4
+        Trockenwiesen und -weiden: https://environment.ld.admin.ch/foen/biotopes/5
+        Biotope: https://environment.ld.admin.ch/foen/biotopes/tot
+    hierarchy:
+      - root: Biotope
+        name: Biotope
+        next-in-hierarchy:
+          path: http://schema.org/hasPart
+          name: Biotoparten
+
+  Überlappung:
+    name:
+      de: Überlappung
+      fr: Überlappung
+      it: Überlappung
+      en: Überlappung
+    description:
+      de: Die Fläche kann einzeln pro Objekt oder überlappend betrachtet werden.
+    dimension-type: Key Dimension
+    datatype: URI
+    scale-type: nominal
+    path: overlap
+    mapping:
+      type: replace
+      replacements:
+        Mit Überlappung: https://environment.ld.admin.ch/foen/overlapping/1
+        Ohne Überlappung: https://environment.ld.admin.ch/foen/overlapping/2
+
+  Anzahl:
+    name:
+      de: Anzahl Objekte
+      fr: Anzahl Objekte
+      it: Anzahl Objekte
+      en: Anzahl Objekte
+    description:
+      de: Anzahl der Objekte
+    datatype: integer
+    dimension-type: Measure Dimension
+    scale-type: ratio
+    path: count
+    unit: UNITLESS
+
+  Anteil der CH-Biotope:
+    name:
+      de: Anteil der CH-Biotope
+      fr: Anteil der CH-Biotope
+      it: Anteil der CH-Biotope
+      en: Anteil der CH-Biotope
+    description:
+      de: Anteil der Objekte an Gesamtmenge der Biotope
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: ratio
+    path: ratio_of_objects
+    unit: PERCENT
+
+  Fläche:
+    name:
+      de: Fläche der Objekte
+      fr: Fläche der Objekte
+      it: Fläche der Objekte
+      en: Fläche der Objekte
+    description:
+      de: Summe der Flächen der Objekte
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: ratio
+    path: area
+    unit: HA
+
+  Anteil CH-Fläche:
+    name:
+      de: Anteil CH-Fläche
+      fr: Anteil CH-Fläche
+      it: Anteil CH-Fläche
+      en: Anteil CH-Fläche
+    description:
+      de: Anteil der Objekte an der Gesamtfläche der Schweiz
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: ratio
+    path: area_of_switzerland
+    unit: PERCENT
+
+  Anteil der CH-Biotope (Fläche):
+    name:
+      de: Anteil der CH-Biotope (Fläche)
+      fr: Anteil der CH-Biotope (Fläche)
+      it: Anteil der CH-Biotope (Fläche)
+      en: Anteil der CH-Biotope (Fläche)
+    description:
+      de: Anteil der Objekte an der Gesamtfläche aller Objekte in der Biotopstatistik
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: ratio
+    path: area_of_biotopes
+    unit: PERCENT

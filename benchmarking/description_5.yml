@@ -1,0 +1,143 @@
+Name:
+  de: Benchmarking Cube
+  fr: Benchmarking Cube
+  it: Benchmarking Cube
+  en: Benchmarking Cube
+Description:
+  de: Ein Beispiel Cube, der fürs Benchmarking verwendet wird.
+  en: An example Cube, used for benchmarking purposes
+Publisher:
+  - IRI: https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu
+Creator:
+  - IRI: https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu
+Contributor:
+  - IRI: https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu
+    Name: Bundesamt für Umwelt
+Date Created:
+  2025-03-12
+Contact Point:
+  E-Mail: marco.kronenberg@bafu.admin.ch
+  Name: Marco Kronenberg
+Base-URI: https://benchmark.ld.admin.ch/
+Identifier: benchmark_1
+Version: 1
+Work Status:
+  Draft
+Visualize:
+  True
+Opendataswiss:
+  False
+# Optional but recommended
+Accrual Periodicity: yearly
+
+# Optional
+Namespace: benchmark
+
+dimensions:
+  # required
+  Jahr:
+    name:
+      de: Jahr
+      fr: An
+      it: Anno
+      en: Year
+    description:
+      de: Jahr der Erhebung
+    dimension-type: Key Dimension
+    datatype: URI
+    scale-type: ordinal
+    path: year
+    data-kind:
+      type: temporal
+      unit: year
+    mapping:
+      type: additive
+      base: https://ld.admin.ch/time/year/
+
+  Station:
+    name:
+      de: Station
+      fr: Station
+      it: Stazione
+      en: Station
+    description:
+      de: Station der Untersuchung
+    dimension-type: Key Dimension
+    datatype: URI
+    scale-type: nominal
+    path: station
+    mapping:
+      type: replace
+      replacements:
+        0: https://mock.ld.admin.ch/station/01
+        1: https://mock.ld.admin.ch/station/02
+
+  0:
+    name:
+      de: Wert
+      fr: Valeur
+      it: Valore
+      en: Value
+    description:
+      de: Gemessener Wert an der Station
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: interval
+    path: value0
+    unit: KiloGM
+
+  1:
+    name:
+      de: Wert
+      fr: Valeur
+      it: Valore
+      en: Value
+    description:
+      de: Gemessener Wert an der Station
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: interval
+    path: value0
+    unit: KiloGM
+
+  2:
+    name:
+      de: Wert
+      fr: Valeur
+      it: Valore
+      en: Value
+    description:
+      de: Gemessener Wert an der Station
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: interval
+    path: value0
+    unit: KiloGM
+
+  3:
+    name:
+      de: Wert
+      fr: Valeur
+      it: Valore
+      en: Value
+    description:
+      de: Gemessener Wert an der Station
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: interval
+    path: value0
+    unit: KiloGM
+
+  4:
+    name:
+      de: Wert
+      fr: Valeur
+      it: Valore
+      en: Value
+    description:
+      de: Gemessener Wert an der Station
+    dimension-type: Measure Dimension
+    datatype: float
+    scale-type: interval
+    path: value0
+    unit: KiloGM
