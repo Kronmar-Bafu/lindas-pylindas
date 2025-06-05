@@ -30,21 +30,21 @@ def benchmark(num_obs, num_dim, validate):
 
 if __name__ == "__main__":
     times = []
-    num_observations_with_validation = [1e1]
-    num_observations_no_validation = [1e2, 1e3, 1e4, 1e5, 1e6]
+    num_observations_with_validation = [1e2, 1e3, 1e4]
+    num_observations_no_validation = [1e2, 1e3, 1e4, 1e5]
     num_dimensions = [1, 10]
-    for num_obs in num_observations_no_validation:
-        for num_dim in num_dimensions:
-            print(num_obs, num_dim)
-            times.append(benchmark(num_obs, num_dim, validate=False))
-
-    df = pd.DataFrame({
-        "Observations": np.repeat(num_observations_no_validation, repeats=len(num_dimensions)),
-        "Dimensions": np.tile(num_dimensions, reps=len(num_observations_no_validation)),
-        "Time": times
-    }
-    )
-    df.to_csv("benchmarking/results_no_validation.csv", index=False)
+    # for num_obs in num_observations_no_validation:
+    #     for num_dim in num_dimensions:
+    #         print(num_obs, num_dim)
+    #         times.append(benchmark(num_obs, num_dim, validate=False))
+    #
+    # df = pd.DataFrame({
+    #     "Observations": np.repeat(num_observations_no_validation, repeats=len(num_dimensions)),
+    #     "Dimensions": np.tile(num_dimensions, reps=len(num_observations_no_validation)),
+    #     "Time": times
+    # }
+    # )
+    # df.to_csv("benchmarking/results_no_validation.csv", index=False)
 
     times = []
     for num_obs in num_observations_with_validation:
