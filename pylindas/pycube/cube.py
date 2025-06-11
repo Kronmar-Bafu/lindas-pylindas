@@ -9,7 +9,7 @@ except ImportError:
     # fallback for Self in python 3.10
     from typing import TypeVar
     Self = TypeVar("Self", bound="Cube")
-from typing import Tuple, Union
+from typing import Tuple, Union, Callable
 import pandas as pd
 import numbers
 import sys
@@ -294,11 +294,24 @@ class Cube:
 
                         # Perform the {} placeholder replacement with the column values, for each row
                         self._dataframe[dim_name] = self._dataframe.apply(lambda row: self._replace_placeholders(row, repl), axis=1)
+                    case "function":
+                        func = self._load_function_via_exec(mapping.get("filepath"), mapping.get("function-name"))
+                        self._dataframe[dim_name] = self._dataframe[dim_name].map(lambda x: func(x))
                         
                 value_type = mapping.get("value-type", 'Shared')
                 assert value_type in ['Shared', 'Literal']
                 self._dataframe[dim_name] = self._dataframe[dim_name].map(lambda v: URIRef(v) if value_type == "Shared" else Literal(v))
 
+    def _load_function_via_exec(self, filepath: str, function_name: str) -> Callable:
+        namespace = {}
+        with open(filepath, "r") as f:
+            code = f.read()
+        exec(code, namespace)  # Execute all code in the file in this namespace
+        func = namespace.get(function_name)
+        if func is None:
+            raise ValueError(f"Function '{function_name}' not found in {filepath}")
+        return func
+    
     def _write_dcat_contact_point(self, contact_dict: dict) -> BNode | URIRef:
         """Writes a contact point to the graph.
         
@@ -708,7 +721,7 @@ class Cube:
                     case "temporal":
                         data_kind_node = BNode()
                         self._graph.add((data_kind_node, RDF.type, TIME.GeneralDateTimeDescription))
-                        self._graph.add((data_kind_node, TIME.unitType, TIME.unitYear))
+                        self._graph.add((data_kind_node, TIME.unitType, TIME["unit" + data_kind.get("unit").capitalize()]))
                         self._graph.add((dim_node, META.dataKind, data_kind_node))
                     case "spatial-shape":
                         data_kind_node = BNode()
