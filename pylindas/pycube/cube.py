@@ -302,7 +302,8 @@ class Cube:
                 assert value_type in ['Shared', 'Literal']
                 self._dataframe[dim_name] = self._dataframe[dim_name].map(lambda v: URIRef(v) if value_type == "Shared" else Literal(v))
 
-    def _load_function_via_exec(self, filepath: str, function_name: str) -> Callable:
+    @staticmethod
+    def _load_function_via_exec(filepath: str, function_name: str) -> Callable:
         namespace = {}
         with open(filepath, "r") as f:
             code = f.read()

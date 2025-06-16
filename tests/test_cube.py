@@ -27,6 +27,9 @@ class TestClass:
         self.target_timespan_cube = self.setup_test_cube(
             "greenhouse_limit/data.csv", "greenhouse_limit/description.yml"
         )
+        self.func_mapping_cube = self.setup_test_cube(
+            "Population_Aargau/data.csv", "Population_Aargau/description.yml"
+        )
 
     def test_standard_error(self):
         sparql = (
@@ -257,4 +260,30 @@ class TestClass:
         result_bool, result_message = self.target_timespan_cube.validate()
         assert result_message == "Cube is valid."
 
+    def test_func_mapping(self):
+        sparql = (
+            "SELECT ?geo"
+            "{"
+            "  <https://ld.admin.ch/bfh/cube/poc_ag/1/shape> sh:property ?prop . "
+            "  ?prop sh:path <https://ld.admin.ch/bfh/region> ;"
+            "     sh:in/rdf:rest*/rdf:first ?geo"
+            "}"
+        )
+        result = self.func_mapping_cube._graph.query(sparql)
+        geos = {"https://ld.admin.ch/canton/19", "https://ld.admin.ch/district/1901",
+                "https://ld.admin.ch/municipality/4001", "https://ld.admin.ch/municipality/4002",
+                "https://ld.admin.ch/municipality/4003", "https://ld.admin.ch/municipality/4004",
+                "https://ld.admin.ch/municipality/4005", "https://ld.admin.ch/municipality/4006",
+                "https://ld.admin.ch/municipality/4007", "https://ld.admin.ch/municipality/4008",
+                "https://ld.admin.ch/municipality/4009", "https://ld.admin.ch/municipality/4010",
+                "https://ld.admin.ch/municipality/4011", "https://ld.admin.ch/municipality/4012",
+                "https://ld.admin.ch/municipality/4013"}
 
+        for row in result:
+            if str(row.geo) in geos:
+                assert True
+            else:
+                with open("faulty_func.txt", "a") as f:
+                    f.write(row.geo)
+                self.func_mapping_cube.serialize("faulty_func_mapping.ttl")
+                assert False
