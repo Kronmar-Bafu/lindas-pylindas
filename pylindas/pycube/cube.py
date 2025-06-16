@@ -296,7 +296,7 @@ class Cube:
                         self._dataframe[dim_name] = self._dataframe.apply(lambda row: self._replace_placeholders(row, repl), axis=1)
                     case "function":
                         func = self._load_function_via_exec(mapping.get("filepath"), mapping.get("function-name"))
-                        self._dataframe[dim_name] = self._dataframe[dim_name].map(lambda x: func(x))
+                        self._dataframe[dim_name] = self._dataframe[dim_name].map(func)
                         
                 value_type = mapping.get("value-type", 'Shared')
                 assert value_type in ['Shared', 'Literal']
