@@ -1,0 +1,21 @@
+ageID,ageName_en,ageDescription_en,ageName_de,ageDescription_de
+age_00_04,Age 00 to 04,People with age 00 to 04 years,Alter 00 bis 04,Personen mit Alter 00 bis 04 Jahre
+age_05_09,Age 05 to 09,People with age 05 to 09 years,Alter 05 bis 09,Personen mit Alter 05 bis 09 Jahre
+age_10_14,Age 10 to 14,People with age 10 to 14 years,Alter 10 bis 14,Personen mit Alter 10 bis 14 Jahre
+age_15_19,Age 15 to 19,People with age 15 to 19 years,Alter 15 bis 19,Personen mit Alter 15 bis 19 Jahre
+age_20_24,Age 20 to 24,People with age 20 to 24 years,Alter 20 bis 24,Personen mit Alter 20 bis 24 Jahre
+age_25_29,Age 25 to 29,People with age 25 to 29 years,Alter 25 bis 29,Personen mit Alter 25 bis 29 Jahre
+age_30_34,Age 30 to 34,People with age 30 to 34 years,Alter 30 bis 34,Personen mit Alter 30 bis 34 Jahre
+age_35_39,Age 35 to 39,People with age 35 to 39 years,Alter 35 bis 39,Personen mit Alter 35 bis 39 Jahre
+age_40_44,Age 40 to 44,People with age 40 to 44 years,Alter 40 bis 44,Personen mit Alter 40 bis 44 Jahre
+age_45_49,Age 45 to 49,People with age 45 to 49 years,Alter 45 bis 49,Personen mit Alter 45 bis 49 Jahre
+age_50_54,Age 50 to 54,People with age 50 to 54 years,Alter 50 bis 54,Personen mit Alter 50 bis 54 Jahre
+age_55_59,Age 55 to 59,People with age 55 to 59 years,Alter 55 bis 59,Personen mit Alter 55 bis 59 Jahre
+age_60_64,Age 60 to 64,People with age 60 to 64 years,Alter 60 bis 64,Personen mit Alter 60 bis 64 Jahre
+age_65_69,Age 65 to 69,People with age 65 to 69 years,Alter 65 bis 69,Personen mit Alter 65 bis 69 Jahre
+age_70_74,Age 70 to 74,People with age 70 to 74 years,Alter 70 bis 74,Personen mit Alter 70 bis 74 Jahre
+age_75_79,Age 75 to 79,People with age 75 to 79 years,Alter 75 bis 79,Personen mit Alter 75 bis 79 Jahre
+age_80_84,Age 80 to 84,People with age 80 to 84 years,Alter 80 bis 84,Personen mit Alter 80 bis 84 Jahre
+age_85_89,Age 85 to 89,People with age 85 to 89 years,Alter 85 bis 89,Personen mit Alter 85 bis 89 Jahre
+age_90_,Age 90 and older,People with age 90 years and older,Alter 90 und älter,Personen mit Alter 90 Jahre und älter
+all,Total population,Total population of all ages,Gesamtbevölkerung,Gesamtbevölkerung aller Altersgruppen

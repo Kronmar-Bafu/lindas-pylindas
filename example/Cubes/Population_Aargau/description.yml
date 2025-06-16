@@ -1,0 +1,125 @@
+Name:
+  de: Bevölkerung - Bevölkerungsbestand - Altersaufbau
+  en: Population - Population Stock - Age Structure
+Description:
+  de: Die kantonale Bevölkerungsstatistik erfasst die ständige Wohnbevölkerung an ihrem Hauptwohnsitz. Das heisst, dass beispielsweise Wochenaufenthalter nicht dort gezählt werden, wo sie sich während der Woche aufhalten, sondern dort wo sie angemeldet sind. Nicht enthalten sind Kurzaufenthalter mit einer Aufenthaltsbewilligung von unter 12 Monaten. Sofern für den 31.12. eines Jahres und für den 01.01. des Folgejahrs Daten vorliegen, sind diese grundsätzlich identisch. Wenn aber per 01.01. des Folgejahrs eine Fusion zweier Gemeinden stattgefunden hat, ist der Gebietsstand unterschiedlich. Entsprechend werden die Daten per 01.01. des Folgejahrs für die fusionierte Gemeinde ausgewiesen.
+  en: The cantonal population statistics record the permanent resident population at their main residence. This means that, for example, weekly commuters are not counted where they stay during the week, but where they are registered. Short-term residents with a residence permit of less than 12 months are not included. If data is available for December 31 of one year and January 1 of the following year, these are generally identical. However, if a merger of two municipalities has taken place on January 1 of the following year, the territorial status is different. Accordingly, the data for January 1 of the following year is shown for the merged municipality.
+Publisher: 
+  - IRI: https://www.ag.ch/de/verwaltung/dfr/statistik
+Creator:
+  - IRI: https://www.ag.ch/de/verwaltung/dfr/statistik
+Contributor:
+  - IRI: https://www.ag.ch/de/verwaltung/dfr/statistik
+Date Created:
+  2025-01-01
+Contact Point:
+  E-Mail: statistik@ag.ch
+  Name: Statistik Aargau
+Base-URI: https://ld.admin.ch/bfh/
+Identifier: poc_ag
+Version: 1
+Work Status: 
+  Draft
+Visualize:
+  True
+# Optional but recommended
+Accrual Periodicity: irregular
+
+# Optional
+Namespace: pocag
+
+dimensions:
+  # required
+  region:
+    name:
+      de: Region
+      en: Region
+    description:
+      de: Region
+      en: Region
+    dimension-type: Key Dimension
+    datatype: URI
+    scale-type: nominal
+    path: region
+    mapping:
+      type: function
+      filepath: example/Cubes/Population_Aargau/func.py
+      function-name: replace_with_shared_dimension
+    data-kind:
+      type: spatial-shape
+    hierarchy:
+      - root: https://ld.admin.ch/canton/19
+        name: AG - District - Municipality
+        next-in-hierarchy:
+          name: District
+          path: http://schema.org/hasPart
+          next-in-hierarchy:
+            name: Municipality
+            path: http://schema.org/hasPart
+
+  date:
+    name:
+      de: Datum
+      en: Date
+    description:
+      de: Datum der Erhebung
+      en: Date of the survey
+    dimension-type: Key Dimension
+    scale-type: interval
+    datatype: date
+    path: date
+    data-kind: 
+      type: temporal
+      unit: day
+  
+  group:
+    name:
+      de: Altersgruppe
+      en: Age Group
+    description:
+      de: Altersgruppe
+      en: Age Group
+    dimension-type: Key Dimension
+    scale-type: nominal
+    datatype: URI
+    path: ageGroup
+    mapping:
+      type: concept
+      replacement-automated: /age_group/{group}
+
+  number:
+    name:
+      de: Anzahl
+      en: Number
+    description:
+      de: Anzahl
+      en: Number
+    dimension-type: Measure Dimension
+    scale-type: ratio
+    datatype: integer
+    path: number
+    unit: NUM
+
+  percentage:
+    name:
+      de: Anteil
+      en: Percentage
+    description:
+      de: Anteil der Altersgruppe an der Gesamtbevölkerung
+      en: Percentage of the age group in the total population
+    dimension-type: Measure Dimension
+    scale-type: ratio
+    datatype: float
+    path: percentage
+    unit: PERCENT
+
+Concepts:
+  age-group:
+    URI: /age_group/{ageID}
+    name-field: ageName
+    multilingual: true
+    other-fields:
+      ageDescription:
+        URI: http://schema.org/description
+        multilingual: true
+        datatype: string
