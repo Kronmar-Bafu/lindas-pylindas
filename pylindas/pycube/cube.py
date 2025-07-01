@@ -17,12 +17,33 @@ from pylindas.lindas.namespaces import *
 from pylindas.lindas.query import query_lindas
 from pyshacl import validate
 
+class DataStructure:
+    def __init__(self, prefix = None, namespace = None):
+        self._graph = Graph(bind_namespaces="none")
+        for prfx, nmspc in Namespaces.items():
+            self._graph.bind(prefix=prfx, namespace=nmspc)
+        try:
+            self._graph.bind(prefix=prefix, namespace=Namespace(namespace))
+        except KeyError:
+            print("no Namespace")
+            pass
+
+    def serialize(self, filename: str, format='turtle'):
+        self._graph.serialize(destination=filename, format=format, encoding="utf-8")
+
+    def add(self, triples):
+        self._graph.add(triples)
+
 class Cube:
     _base_uri: URIRef
     _cube_uri: URIRef
     _cube_uri_no_version: URIRef # same as _cube_uri but without the version, needed for concepts handling
     _cube_dict: dict
     _graph: Graph
+    Cube: DataStructure
+    Shape: DataStructure
+    Observation: DataStructure
+    Concept: DataStructure
     _dataframe: pd.DataFrame
     _shape_dict: dict
     _shape_URI: URIRef
@@ -47,8 +68,10 @@ class Cube:
         self._cube_uri, self._cube_uri_no_version = self._setup_cube_uri(local=local, environment=environment)
         assert self._cube_uri is not None
         self._setup_shape_dicts()
-        self._graph = self._setup_graph()
-        # self._graph.serialize("example/mock-cube.ttl", format="turtle")
+        self.Cube = DataStructure()
+        self.Shape = DataStructure()
+        self.Observation = DataStructure()
+        self.Concept = DataStructure()
 
     def __str__(self) -> str:
         """
@@ -214,21 +237,21 @@ class Cube:
         self._shape_URI = URIRef(self._cube_uri + "/shape") 
         self._key_dimensions = [dim_name for dim_name, dim in self._shape_dict.items() if dim.get("dimension-type") == "Key Dimension"]
 
-    def _setup_graph(self) -> Graph:
-        """Set up the graph by binding namespaces and returning the graph object.
-        
-        Returns:
-            Graph: The graph object with namespaces bound.
-        """
-        graph = Graph(bind_namespaces="none")
-        for prefix, nmspc in Namespaces.items():
-            graph.bind(prefix=prefix, namespace=nmspc)
-        try:
-            graph.bind(prefix=self._cube_dict.get("Namespace"), namespace=Namespace(self._base_uri))
-        except KeyError:
-            print("no Namespace")
-            pass
-        return graph
+    # def _setup_graph(self) -> Graph:
+    #     """Set up the graph by binding namespaces and returning the graph object.
+    #
+    #     Returns:
+    #         Graph: The graph object with namespaces bound.
+    #     """
+    #     graph = Graph(bind_namespaces="none")
+    #     for prefix, nmspc in Namespaces.items():
+    #         graph.bind(prefix=prefix, namespace=nmspc)
+    #     try:
+    #         graph.bind(prefix=self._cube_dict.get("Namespace"), namespace=Namespace(self._base_uri))
+    #     except KeyError:
+    #         print("no Namespace")
+    #         pass
+    #     return graph
 
     def _construct_obs_uri(self) -> None:
         """Construct observation URIs for each row in the dataframe.
@@ -248,6 +271,7 @@ class Cube:
 
     # Function for dynamic replacement of column names, in between {} by effective column values in a row
     #   template example: http://the_cube_uri/concept/airport_type/{typeOfAirport}/{typeOfAirport2nd}
+    @staticmethod
     def _replace_placeholders(self, row, template):
         result = template
         placeholders = re.findall(r'\{(.*?)\}', template)  # find each place holder inbetween {}
