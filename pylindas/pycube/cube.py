@@ -1,6 +1,6 @@
 import re
 from urllib.parse import quote
-from rdflib import BNode, Graph, Literal, RDF, URIRef, XSD, DCTERMS
+from rdflib import BNode, Literal, RDF, URIRef, XSD, DCTERMS
 from rdflib.collection import Collection
 from datetime import datetime, timezone
 try:
@@ -13,33 +13,16 @@ from typing import Tuple, Union, Callable
 import pandas as pd
 import numbers
 import sys
-from pylindas.lindas.namespaces import *
 from pylindas.lindas.query import query_lindas
+from pylindas.lindas.datastructures import DataStructure
 from pyshacl import validate
 
-class DataStructure:
-    def __init__(self, prefix = None, namespace = None):
-        self._graph = Graph(bind_namespaces="none")
-        for prfx, nmspc in Namespaces.items():
-            self._graph.bind(prefix=prfx, namespace=nmspc)
-        try:
-            self._graph.bind(prefix=prefix, namespace=Namespace(namespace))
-        except KeyError:
-            print("no Namespace")
-            pass
-
-    def serialize(self, filename: str, format='turtle'):
-        self._graph.serialize(destination=filename, format=format, encoding="utf-8")
-
-    def add(self, triples):
-        self._graph.add(triples)
 
 class Cube:
     _base_uri: URIRef
     _cube_uri: URIRef
     _cube_uri_no_version: URIRef # same as _cube_uri but without the version, needed for concepts handling
     _cube_dict: dict
-    _graph: Graph
     Cube: DataStructure
     Shape: DataStructure
     Observation: DataStructure
