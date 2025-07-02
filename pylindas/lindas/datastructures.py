@@ -12,6 +12,15 @@ class DataStructure:
             print("no Namespace")
             pass
 
+    def __str__(self) -> str:
+        return f"pylindas.DataStructure with {self.size()} triples."
+
+    def __add__(self, other):
+        return self._graph + other._graph
+
+    def __iadd__(self, other):
+        return self._graph + other._graph
+
     def serialize(self, filename: str, format='turtle'):
         self._graph.serialize(destination=filename, format=format, encoding="utf-8")
 
@@ -29,7 +38,7 @@ class DataStructure:
 
         return result
 
-    def __str__(self) -> str:
+    def size(self):
         how_many_triples_query = (
             "SELECT (COUNT(*) as ?Triples)"
             "WHERE {"
@@ -37,5 +46,5 @@ class DataStructure:
             "}"
         )
         how_many_triples = self._graph.query(how_many_triples_query, kind="SELECT").get("Triples").value
+        return how_many_triples
 
-        return f"pylindas.DataStructure with {how_many_triples} triples."

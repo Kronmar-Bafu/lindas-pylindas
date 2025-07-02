@@ -11,9 +11,9 @@ except ImportError:
     Self = TypeVar("Self", bound="Cube")
 from typing import Tuple, Union, Callable
 import pandas as pd
-import numbers
 import sys
 from pylindas.lindas.query import query_lindas
+from pylindas.lindas.namespaces import *
 from pylindas.lindas.datastructures import DataStructure
 from pyshacl import validate
 
@@ -52,7 +52,7 @@ class Cube:
         assert self._cube_uri is not None
         self._setup_shape_dicts()
         self.Cube = DataStructure()
-        self.Shape = DataStructure()
+        self.Constraint = DataStructure()
         self.Observation = DataStructure()
         self.Concept = DataStructure()
 
@@ -65,16 +65,14 @@ class Cube:
         Returns:
             str: A string representation of the Cube object.
         """
-        how_many_triples_query = (
-            "SELECT (COUNT(*) as ?Triples)"
-            "WHERE {"
-            "    ?s ?p ?o."
-            "}"
+        output = (
+            f"Cube Object <{self._cube_uri}> with name '{self._cube_dict.get('Name').get('en')}'.\n\n"
+            f"{self._dataframe.head()}\n"
+            f"cube:Cube: {print(self.Cube)}\n"
+            f"cube:Constraint: {print(self.Constraint)}\n"
+            f"cube:Observation: {print(self.Observation)}\n"
+            f"and Concepts: {print(self.Concept)}"
         )
-        how_many_triples = self._graph.query(how_many_triples_query).bindings[0].get("Triples").value
-        output = (f"Cube Object <{self._cube_uri}> with name '{self._cube_dict.get('Name').get('en')}'.\n\n"
-                  f"{self._dataframe.head()}\n"
-                  f"Number of triples in Graph: {how_many_triples}")
         return output
 
     def prepare_data(self) -> Self:
@@ -99,80 +97,80 @@ class Cube:
         Returns:
             self
         """
-        self._graph.add((self._cube_uri, RDF.type, CUBE.Cube))
-        self._graph.add((self._cube_uri, RDF.type, SCHEMA.Dataset))
-        self._graph.add((self._cube_uri, RDF.type, DCAT.Dataset))
-        self._graph.add((self._cube_uri, RDF.type, VOID.Dataset))
+        self.Cube.add((self._cube_uri, RDF.type, CUBE.Cube))
+        self.Cube.add((self._cube_uri, RDF.type, SCHEMA.Dataset))
+        self.Cube.add((self._cube_uri, RDF.type, DCAT.Dataset))
+        self.Cube.add((self._cube_uri, RDF.type, VOID.Dataset))
 
         names = self._cube_dict.get("Name")
         for lan, name in names.items():
-            self._graph.add((self._cube_uri, SCHEMA.name, Literal(name, lang=lan)))
+            self.Cube.add((self._cube_uri, SCHEMA.name, Literal(name, lang=lan)))
 
         descriptions = self._cube_dict.get("Description")
         for lan, desc in descriptions.items():
-            self._graph.add((self._cube_uri, SCHEMA.description, Literal(desc, lang=lan)))
+            self.Cube.add((self._cube_uri, SCHEMA.description, Literal(desc, lang=lan)))
 
         publisher = self._cube_dict.get("Publisher")
         for pblshr in publisher:
-            self._graph.add((self._cube_uri, SCHEMA.publisher, URIRef(pblshr.get("IRI"))))
+            self.Cube.add((self._cube_uri, SCHEMA.publisher, URIRef(pblshr.get("IRI"))))
 
         creator = self._cube_dict.get("Creator")
         for crtr in creator:
-            self._graph.add((self._cube_uri, SCHEMA.creator, URIRef(crtr.get("IRI"))))
+            self.Cube.add((self._cube_uri, SCHEMA.creator, URIRef(crtr.get("IRI"))))
 
         contributor = self._cube_dict.get("Contributor")
         for cntrbtr in contributor:
-            self._graph.add((self._cube_uri, SCHEMA.contributor, URIRef(cntrbtr.get("IRI"))))
+            self.Cube.add((self._cube_uri, SCHEMA.contributor, URIRef(cntrbtr.get("IRI"))))
 
         dcat_contact_point = self._write_dcat_contact_point(self._cube_dict.get("Contact Point"))
-        self._graph.add((self._cube_uri, DCAT.contactPoint, dcat_contact_point))
+        self.Cube.add((self._cube_uri, DCAT.contactPoint, dcat_contact_point))
         schema_contact_point = self._write_schema_contact_point(self._cube_dict.get("Contact Point"))
-        self._graph.add((self._cube_uri, SCHEMA.contactPoint, schema_contact_point))
+        self.Cube.add((self._cube_uri, SCHEMA.contactPoint, schema_contact_point))
 
         for creator in self._cube_dict.get("Creator", []):
             iri = creator.get('IRI')
-            self._graph.add((self._cube_uri, DCT.creator, URIRef(iri)))
+            self.Cube.add((self._cube_uri, DCT.creator, URIRef(iri)))
 
         for theme in self._cube_dict.get("Themes", []):
             iri = theme.get('IRI')
             if not iri:
                 continue
-            self._graph.add((self._cube_uri, DCAT.theme, URIRef(theme['IRI'])))
+            self.Cube.add((self._cube_uri, DCAT.theme, URIRef(theme['IRI'])))
 
         version = self._cube_dict.get("Version")
-        self._graph.add((self._cube_uri, SCHEMA.version, Literal(version)))
+        self.Cube.add((self._cube_uri, SCHEMA.version, Literal(version)))
 
         identifier = self._cube_dict.get("Identifier")
-        self._graph.add((self._cube_uri, DCTERMS.identifier, Literal(identifier)))
+        self.Cube.add((self._cube_uri, DCTERMS.identifier, Literal(identifier)))
 
         today = datetime.today().strftime("%Y-%m-%d")
         now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        self._graph.add(
+        self.Cube.add(
             (self._cube_uri, SCHEMA.dateCreated, Literal(self._cube_dict.get("Date Created"), datatype=XSD.date)))
-        self._graph.add((self._cube_uri, SCHEMA.datePublished, Literal(today, datatype=XSD.date)))
+        self.Cube.add((self._cube_uri, SCHEMA.datePublished, Literal(today, datatype=XSD.date)))
         # todo: serialization yields improper format for datetime (with timezone as +02:00 instead of proper UTC)
-        self._graph.add((self._cube_uri, SCHEMA.dateModified, Literal(now, datatype=XSD.dateTime)))
+        self.Cube.add((self._cube_uri, SCHEMA.dateModified, Literal(now, datatype=XSD.dateTime)))
 
-        self._graph.add((self._cube_uri, CUBE.observationSet, self._cube_uri + "/ObservationSet"))
-        self._graph.add((self._cube_uri, CUBE.observationConstraint, self._shape_URI))
+        self.Cube.add((self._cube_uri, CUBE.observationSet, self._cube_uri + "/ObservationSet"))
+        self.Cube.add((self._cube_uri, CUBE.observationConstraint, self._shape_URI))
 
         if self._cube_dict.get("Visualize"):
-            self._graph.add((self._cube_uri, SCHEMA.workExample, URIRef("https://ld.admin.ch/application/visualize")))
+            self.Cube.add((self._cube_uri, SCHEMA.workExample, URIRef("https://ld.admin.ch/application/visualize")))
 
         work_status = self._cube_dict.get("Work Status")
         if work_status == "Published":
-            self._graph.add((self._cube_uri, SCHEMA.creativeWorkStatus,
+            self.Cube.add((self._cube_uri, SCHEMA.creativeWorkStatus,
                              URIRef("https://ld.admin.ch/vocabulary/CreativeWorkStatus/Published")))
             if opendataswiss:
                 self._add_opendata_profile()
         elif work_status == "Draft":
-            self._graph.add((self._cube_uri, SCHEMA.creativeWorkStatus,
+            self.Cube.add((self._cube_uri, SCHEMA.creativeWorkStatus,
                              URIRef("https://ld.admin.ch/vocabulary/CreativeWorkStatus/Draft")))
 
         if self._cube_dict.get("Accrual Periodicity"):
             accrual_periodicity_uri = self._get_accrual_periodicity(self._cube_dict.get("Accrual Periodicity"))
-            self._graph.add((self._cube_uri, DCT.accrualPeriodicity, accrual_periodicity_uri))
+            self.Cube.add((self._cube_uri, DCT.accrualPeriodicity, accrual_periodicity_uri))
         return self
 
     def get_iri(self) -> URIRef:
@@ -333,9 +331,9 @@ class Cube:
             return URIRef(contact_dict.get("IRI"))
         else:
             contact_node = BNode()
-            self._graph.add((contact_node, RDF.type, VCARD.Organization))
-            self._graph.add((contact_node, VCARD.hasEmail, Literal(contact_dict.get("E-Mail"), datatype=XSD.string)))
-            self._graph.add((contact_node, VCARD.fn, Literal(contact_dict.get("Name"), datatype=XSD.string)))
+            self.Cube.add((contact_node, RDF.type, VCARD.Organization))
+            self.Cube.add((contact_node, VCARD.hasEmail, Literal(contact_dict.get("E-Mail"), datatype=XSD.string)))
+            self.Cube.add((contact_node, VCARD.fn, Literal(contact_dict.get("Name"), datatype=XSD.string)))
             return contact_node
 
     def _write_schema_contact_point(self, contact_dict: dict) -> BNode | URIRef:
@@ -351,9 +349,9 @@ class Cube:
             return URIRef(contact_dict.get("IRI"))
         else:
             contact_node = BNode()
-            self._graph.add((contact_node, RDF.type, SCHEMA.ContactPoint))
-            self._graph.add((contact_node, SCHEMA.email, Literal(contact_dict.get("E-Mail"), datatype=XSD.string)))
-            self._graph.add((contact_node, SCHEMA.name, Literal(contact_dict.get("Name"), datatype=XSD.string)))
+            self.Cube.add((contact_node, RDF.type, SCHEMA.ContactPoint))
+            self.Cube.add((contact_node, SCHEMA.email, Literal(contact_dict.get("E-Mail"), datatype=XSD.string)))
+            self.Cube.add((contact_node, SCHEMA.name, Literal(contact_dict.get("Name"), datatype=XSD.string)))
             return contact_node
 
     @staticmethod
@@ -387,11 +385,11 @@ class Cube:
         Returns:
             Self
         """
-        self._graph.add((self._cube_uri + "/ObservationSet", RDF.type, CUBE.ObservationSet))
+        self.Cube.add((self._cube_uri + "/ObservationSet", RDF.type, CUBE.ObservationSet))
         self._dataframe.apply(self._add_observation, axis=1)
         return self
 
-    def serialize(self, filename: str) -> Self:
+    def serialize(self, filename: str, format='turtle', split=False):
         """Serialize the cube to a file.
 
         This function serializes the cube to the given file name in turtle format.
@@ -402,8 +400,14 @@ class Cube:
         Returns:
             Self
         """
-        self._graph.serialize(destination=filename, format="turtle", encoding="utf-8")
-        return self
+        if split:
+            self.Cube.serialize(filename=filename + "cube.ttl", format=format)
+            self.Constraint.serialize(filename=filename + "constraints.ttl", format=format)
+            self.Observation.serialize(filename=filename + "observations.ttl", format=format)
+            if self.Concept.size() > 0:
+                self.Concept.serialize(filename=filename + "concepts.ttl", format=format)
+        else:
+            (self.Cube + self.Constraint + self.Observation + self.Concept).serialize(filename=filename, format=format)
 
     def _add_observation(self, obs: pd.Series) -> None:
         """Add an observation to the cube.
