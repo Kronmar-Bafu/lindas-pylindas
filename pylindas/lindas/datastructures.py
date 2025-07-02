@@ -28,3 +28,14 @@ class DataStructure:
                 result = self._graph.query(query)
 
         return result
+
+    def __str__(self) -> str:
+        how_many_triples_query = (
+            "SELECT (COUNT(*) as ?Triples)"
+            "WHERE {"
+            "    ?s ?p ?o."
+            "}"
+        )
+        how_many_triples = self._graph.query(how_many_triples_query, kind="SELECT").get("Triples").value
+
+        return f"pylindas.DataStructure with {how_many_triples} triples."
