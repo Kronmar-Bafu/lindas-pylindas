@@ -1,6 +1,6 @@
 import re
 from urllib.parse import quote
-from rdflib import BNode, Literal, RDF, URIRef, XSD, DCTERMS
+from rdflib import BNode, Graph, Literal, RDF, URIRef, XSD, DCTERMS
 from rdflib.collection import Collection
 from datetime import datetime, timezone
 try:
@@ -51,10 +51,15 @@ class Cube:
         self._cube_uri, self._cube_uri_no_version = self._setup_cube_uri(local=local, environment=environment)
         assert self._cube_uri is not None
         self._setup_shape_dicts()
-        self.Cube = DataStructure()
-        self.Constraint = DataStructure()
-        self.Observation = DataStructure()
-        self.Concept = DataStructure()
+        try:
+            prefix = cube_yaml.get("Namespace")
+        except KeyError:
+            prefix = None
+        self.Cube = DataStructure(prefix=prefix, namespace=self._base_uri)
+        self.Constraint = DataStructure(prefix=prefix, namespace=self._base_uri)
+        self.Observation = DataStructure(prefix=prefix, namespace=self._base_uri)
+        self.Concept = DataStructure(prefix=prefix, namespace=self._base_uri)
+
 
     def __str__(self) -> str:
         """
@@ -253,7 +258,7 @@ class Cube:
     # Function for dynamic replacement of column names, in between {} by effective column values in a row
     #   template example: http://the_cube_uri/concept/airport_type/{typeOfAirport}/{typeOfAirport2nd}
     @staticmethod
-    def _replace_placeholders(self, row, template):
+    def _replace_placeholders(row, template):
         result = template
         placeholders = re.findall(r'\{(.*?)\}', template)  # find each place holder inbetween {}
         for placeholder in placeholders:
@@ -407,7 +412,7 @@ class Cube:
             if self.Concept.size() > 0:
                 self.Concept.serialize(filename=filename + "concepts.ttl", format=format)
         else:
-            (self.Cube + self.Constraint + self.Observation + self.Concept).serialize(filename=filename, format=format)
+            (self.Cube.graph + self.Constraint.graph + self.Observation.graph + self.Concept.graph).serialize(filename=filename, format=format)
 
     def _add_observation(self, obs: pd.Series) -> None:
         """Add an observation to the cube.
@@ -420,15 +425,15 @@ class Cube:
             Returns:
                 None
         """
-        self._graph.add((self._cube_uri + "/ObservationSet", CUBE.observation, obs.name)) #obs.name is the index of the row which was set to be the 'obs-uri'
-        self._graph.add((obs.name, RDF.type, CUBE.Observation))
-        self._graph.add((obs.name, CUBE.observedBy, URIRef(self._cube_dict.get("Creator")[0].get("IRI"))))
+        self.Observation.add((self._cube_uri + "/ObservationSet", CUBE.observation, obs.name)) #obs.name is the index of the row which was set to be the 'obs-uri'
+        self.Observation.add((obs.name, RDF.type, CUBE.Observation))
+        self.Observation.add((obs.name, CUBE.observedBy, URIRef(self._cube_dict.get("Creator")[0].get("IRI"))))
 
         for column in obs.keys():
             shape_column = self._get_shape_column(column)
             path = URIRef(self._base_uri + shape_column.get("path"))
             sanitized_value = self._sanitize_value(obs.get(column), shape_column.get("datatype"), shape_column.get("language"))
-            self._graph.add((obs.name, URIRef(path), sanitized_value))
+            self.Observation.add((obs.name, URIRef(path), sanitized_value))
 
     def _get_shape_column(self, column: str):
         c = self._shape_dict.get(column)
@@ -446,19 +451,19 @@ class Cube:
             Returns:
                 Self
         """
-        self._graph.add((self._shape_URI, RDF.type, CUBE.Constraint))
-        self._graph.add((self._shape_URI, RDF.type, SH.NodeShape))
+        self.Constraint.add((self._shape_URI, RDF.type, CUBE.Constraint))
+        self.Constraint.add((self._shape_URI, RDF.type, SH.NodeShape))
 
-        self._graph.add((self._shape_URI, SH.closed, Literal("true", datatype=XSD.boolean)))
+        self.Constraint.add((self._shape_URI, SH.closed, Literal("true", datatype=XSD.boolean)))
 
         observation_class_node = self._write_observation_class_shape()
-        self._graph.add((self._shape_URI, SH.property, observation_class_node))
+        self.Constraint.add((self._shape_URI, SH.property, observation_class_node))
 
         observed_by_node = self._write_observed_by_node()
-        self._graph.add((self._shape_URI, SH.property, observed_by_node))
+        self.Constraint.add((self._shape_URI, SH.property, observed_by_node))
         for dim, dim_dict in self._shape_dict.items():
             shape = self._write_dimension_shape(dim_dict, self._dataframe[dim])
-            self._graph.add((self._shape_URI, SH.property, shape))
+            self.Constraint.add((self._shape_URI, SH.property, shape))
         return self
     
     def write_concept(self, concept_key: str, concept_data: pd.DataFrame):
@@ -565,17 +570,17 @@ class Cube:
             for lang in self._languages:
                 name_key = f"{nameField}_{lang}"
                 if name_key in concept:
-                    self._graph.add((conceptURI, URIRef(SCHEMA.name), Literal(concept.get(name_key), lang=lang.lower())))            
+                    self.Concept.add((conceptURI, URIRef(SCHEMA.name), Literal(concept.get(name_key), lang=lang.lower())))
         else:
-            self._graph.add((conceptURI, URIRef(SCHEMA.name), Literal(concept.get(nameField))))
+            self.Concept.add((conceptURI, URIRef(SCHEMA.name), Literal(concept.get(nameField))))
 
         if positionField:
-            self._graph.add((conceptURI, URIRef(SCHEMA.position), Literal(concept.get(positionField))))
+            self.Concept.add((conceptURI, URIRef(SCHEMA.position), Literal(concept.get(positionField))))
 
         # If the concept is part of the cube (URI based on the cube's URI), its URL contains the cube's version
         # Then link that version to a URI with no version as done by the Cube Creator to keep links between versions of a concept
         if "URI_UNVERSIONED" in concept:
-            self._graph.add((conceptURI, URIRef(SCHEMA.sameAs), URIRef(concept.URI_UNVERSIONED)))
+            self.Concept.add((conceptURI, URIRef(SCHEMA.sameAs), URIRef(concept.URI_UNVERSIONED)))
 
         # Handling other fields/properties
         for key, value in otherFields_dict.items():
@@ -583,7 +588,7 @@ class Cube:
                 for lang in self._languages:
                     key_lng = f"{key}_{lang}"
                     if key_lng in concept:
-                        self._graph.add((conceptURI, URIRef(value['URI'] ), Literal(concept.get(key_lng), lang=lang.lower())))
+                        self.Concept.add((conceptURI, URIRef(value['URI'] ), Literal(concept.get(key_lng), lang=lang.lower())))
             else:
                 if key in concept:
                     # Note: get the datatype + language of the concept from the configuration file
@@ -591,7 +596,7 @@ class Cube:
                     #   but it might happen that a field is not multilingual, but still concerns a specific language
                     #   on the other hand, if the 'language' key is not in the configuration file -> it will be a simple string with no language tag
                     sanitized_value = self._sanitize_value(concept.get(key), value.get('datatype'), value.get('language'))
-                    self._graph.add((conceptURI, URIRef(value['URI'] ), sanitized_value))
+                    self.Concept.add((conceptURI, URIRef(value['URI'] ), sanitized_value))
 
 
 
@@ -611,7 +616,7 @@ class Cube:
             """
 
             # Execute the query
-            results = self._graph.query(query)
+            results = self.Observation.query(query)
 
             print("\nChecking links to concept table")
             print("--------------------------------") 
@@ -646,76 +651,76 @@ class Cube:
         """
         dim_node = BNode()
         
-        self._graph.add((dim_node, SH.minCount, Literal(1)))
-        self._graph.add((dim_node, SH.maxCount, Literal(1)))
+        self.Constraint.add((dim_node, SH.minCount, Literal(1)))
+        self.Constraint.add((dim_node, SH.maxCount, Literal(1)))
 
         for lan, name in dim_dict.get("name").items():
-            self._graph.add((dim_node, SCHEMA.name, Literal(name, lang=lan)))
+            self.Constraint.add((dim_node, SCHEMA.name, Literal(name, lang=lan)))
         for lan, desc in dim_dict.get("description").items():
-            self._graph.add((dim_node, SCHEMA.description, Literal(desc, lang=lan)))
+            self.Constraint.add((dim_node, SCHEMA.description, Literal(desc, lang=lan)))
         
-        self._graph.add((dim_node, SH.path, URIRef(self._base_uri + dim_dict.get("path"))))
+        self.Constraint.add((dim_node, SH.path, URIRef(self._base_uri + dim_dict.get("path"))))
 
         if dim_dict.get("datatype") == "URI":
-            self._graph.add((dim_node, SH.nodeKind, SH.IRI))
+            self.Constraint.add((dim_node, SH.nodeKind, SH.IRI))
         else:
-            self._graph.add((dim_node, SH.nodeKind, SH.Literal))
-            self._graph.add((dim_node, SH.datatype, XSD[dim_dict.get("datatype")]))
+            self.Constraint.add((dim_node, SH.nodeKind, SH.Literal))
+            self.Constraint.add((dim_node, SH.datatype, XSD[dim_dict.get("datatype")]))
 
         match dim_dict.get("dimension-type"):
             case "Key Dimension":
-                self._graph.add((dim_node, RDF.type, CUBE.KeyDimension))
+                self.Constraint.add((dim_node, RDF.type, CUBE.KeyDimension))
                 
             case "Measure Dimension":
-                self._graph.add((dim_node, RDF.type, CUBE.MeasureDimension))
+                self.Constraint.add((dim_node, RDF.type, CUBE.MeasureDimension))
             
             case "Annotation":
-                self._graph.add((dim_node, SH.nodeKind, SH.Literal))
+                self.Constraint.add((dim_node, SH.nodeKind, SH.Literal))
 
             case "Standard Error":
                 relation_node = BNode()
                 relation_path = dim_dict.get("relates-to")
-                self._graph.add((relation_node, RDF.type, RELATION.StandardError))
-                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
-                self._graph.add((dim_node, META.dimensionRelation, relation_node))
-                self._graph.add((dim_node, SH.nodeKind, SH.Literal))
+                self.Constraint.add((relation_node, RDF.type, RELATION.StandardError))
+                self.Constraint.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
+                self.Constraint.add((dim_node, META.dimensionRelation, relation_node))
+                self.Constraint.add((dim_node, SH.nodeKind, SH.Literal))
             
             # todo: in Doc beschreiben
             case "Upper uncertainty":
                 relation_node = BNode()
                 relation_path = dim_dict.get("relates-to")
-                self._graph.add((relation_node, RDF.type, RELATION.ConfidenceUpperBound))
-                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
-                self._graph.add((dim_node, META.dimensionRelation, relation_node))
-                self._graph.add((dim_node, SH.nodeKind, SH.Literal))
-                self._graph.add((relation_node, DCT.type, Literal("Confidence interval")))
+                self.Constraint.add((relation_node, RDF.type, RELATION.ConfidenceUpperBound))
+                self.Constraint.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
+                self.Constraint.add((dim_node, META.dimensionRelation, relation_node))
+                self.Constraint.add((dim_node, SH.nodeKind, SH.Literal))
+                self.Constraint.add((relation_node, DCT.type, Literal("Confidence interval")))
 
             case "Lower uncertainty":
                 relation_node = BNode()
                 relation_path = dim_dict.get("relates-to")
-                self._graph.add((relation_node, RDF.type, RELATION.ConfidenceLowerBound))
-                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
-                self._graph.add((dim_node, META.dimensionRelation, relation_node))
-                self._graph.add((dim_node, SH.nodeKind, SH.Literal))
-                self._graph.add((relation_node, DCT.type, Literal("Confidence interval")))
+                self.Constraint.add((relation_node, RDF.type, RELATION.ConfidenceLowerBound))
+                self.Constraint.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
+                self.Constraint.add((dim_node, META.dimensionRelation, relation_node))
+                self.Constraint.add((dim_node, SH.nodeKind, SH.Literal))
+                self.Constraint.add((relation_node, DCT.type, Literal("Confidence interval")))
 
             case _ as unrecognized:
                 print(f"Dimension Type '{unrecognized}' is not recognized")
         
         match dim_dict.get("scale-type"):
             case "nominal":
-                self._graph.add((dim_node, QUDT.scaleType, QUDT.NominalScale))
+                self.Constraint.add((dim_node, QUDT.scaleType, QUDT.NominalScale))
                 if dim_dict.get("dimension-type") == "Key Dimension":
                     self._add_sh_list(dim_node, values)
             case "ordinal":
-                self._graph.add((dim_node, QUDT.scaleType, QUDT.OrdinalScale))
+                self.Constraint.add((dim_node, QUDT.scaleType, QUDT.OrdinalScale))
                 if dim_dict.get("dimension-type") == "Key Dimension":
                     self._add_sh_list(dim_node, values)
             case "interval":
-                self._graph.add((dim_node, QUDT.scaleType, QUDT.IntervalScale))
+                self.Constraint.add((dim_node, QUDT.scaleType, QUDT.IntervalScale))
                 self._add_min_max(dim_dict, dim_node, values)
             case "ratio":
-                self._graph.add((dim_node, QUDT.scaleType, QUDT.RatioScale))
+                self.Constraint.add((dim_node, QUDT.scaleType, QUDT.RatioScale))
                 self._add_min_max(dim_dict, dim_node, values)
             case _ as unrecognized:
                 print(f"Scale Type '{unrecognized}' is not recognized")
@@ -724,7 +729,7 @@ class Cube:
         # unit from https://www.qudt.org/doc/DOC_VOCAB-UNITS.html
 
         if dim_dict.get("unit") is not None:
-            self._graph.add((dim_node, QUDT.hasUnit, getattr(UNIT, dim_dict.get("unit"))))
+            self.Constraint.add((dim_node, QUDT.hasUnit, getattr(UNIT, dim_dict.get("unit"))))
 
         try:
             data_kind = dim_dict.get("data-kind")
@@ -732,17 +737,17 @@ class Cube:
                 match data_kind.get("type"):
                     case "temporal":
                         data_kind_node = BNode()
-                        self._graph.add((data_kind_node, RDF.type, TIME.GeneralDateTimeDescription))
-                        self._graph.add((data_kind_node, TIME.unitType, TIME["unit" + data_kind.get("unit").capitalize()]))
-                        self._graph.add((dim_node, META.dataKind, data_kind_node))
+                        self.Constraint.add((data_kind_node, RDF.type, TIME.GeneralDateTimeDescription))
+                        self.Constraint.add((data_kind_node, TIME.unitType, TIME["unit" + data_kind.get("unit").capitalize()]))
+                        self.Constraint.add((dim_node, META.dataKind, data_kind_node))
                     case "spatial-shape":
                         data_kind_node = BNode()
-                        self._graph.add((data_kind_node, RDF.type, SCHEMA.GeoShape))
-                        self._graph.add((dim_node, META.dataKind, data_kind_node))
+                        self.Constraint.add((data_kind_node, RDF.type, SCHEMA.GeoShape))
+                        self.Constraint.add((dim_node, META.dataKind, data_kind_node))
                     case "spatial-coordinates":
                         data_kind_node = BNode()
-                        self._graph.add((data_kind_node, RDF.type, SCHEMA.GeoCoordinates))
-                        self._graph.add((dim_node, META.dataKind, data_kind_node))
+                        self.Constraint.add((data_kind_node, RDF.type, SCHEMA.GeoCoordinates))
+                        self.Constraint.add((dim_node, META.dataKind, data_kind_node))
             except AttributeError:
                 pass
         except (KeyError, AttributeError):
@@ -751,53 +756,53 @@ class Cube:
         if dim_dict.get("annotation"):
             for antn in dim_dict.get("annotation"):
                 annotation_node = self._write_annotation(antn, datatype=dim_dict.get("datatype"))
-                self._graph.add((dim_node, META.annotation, annotation_node))
+                self.Constraint.add((dim_node, META.annotation, annotation_node))
 
         if dim_dict.get("hierarchy"):
             for hrch in dim_dict.get("hierarchy"):
                 hierarchy_node = self._write_hierarchy(hrch, dim_dict)
-                self._graph.add((dim_node, META.inHierarchy, hierarchy_node))
+                self.Constraint.add((dim_node, META.inHierarchy, hierarchy_node))
 
         return dim_node
 
     def _write_observation_class_shape(self):
         observation_class_shape = BNode()
-        self._graph.add((observation_class_shape, SH.path, RDF.type))
-        self._graph.add((observation_class_shape, SH.nodeKind, SH.IRI))
+        self.Constraint.add((observation_class_shape, SH.path, RDF.type))
+        self.Constraint.add((observation_class_shape, SH.nodeKind, SH.IRI))
 
         list_node = BNode()
-        Collection(self._graph, list_node, [CUBE.Observation])
-        self._graph.add((observation_class_shape, URIRef(SH + "in"), list_node))
+        Collection(self.Constraint.graph, list_node, [CUBE.Observation])
+        self.Constraint.add((observation_class_shape, URIRef(SH + "in"), list_node))
         return observation_class_shape
 
     def _write_observed_by_node(self):
         observed_by_node = BNode()
-        self._graph.add((observed_by_node, SH.path, CUBE.observedBy))
-        self._graph.add((observed_by_node, SH.nodeKind, SH.IRI))
+        self.Constraint.add((observed_by_node, SH.path, CUBE.observedBy))
+        self.Constraint.add((observed_by_node, SH.nodeKind, SH.IRI))
 
         list_node = BNode()
-        Collection(self._graph, list_node, [URIRef(self._cube_dict.get("Creator")[0].get("IRI"))])
-        self._graph.add((observed_by_node, URIRef(SH + "in"), list_node))
+        Collection(self.Constraint.graph, list_node, [URIRef(self._cube_dict.get("Creator")[0].get("IRI"))])
+        self.Constraint.add((observed_by_node, URIRef(SH + "in"), list_node))
         return observed_by_node
 
     def _write_hierarchy(self, hierarchy_dict:dict, dim_dict = None) -> BNode:
         hierarchy_node = BNode()
-        self._graph.add((hierarchy_node, RDF.type, META.Hierarchy))
+        self.Constraint.add((hierarchy_node, RDF.type, META.Hierarchy))
 
         root = str(hierarchy_dict.get("root"))
         if root.startswith("http"):
-            self._graph.add((hierarchy_node, META.hierarchyRoot, URIRef(root)))
+            self.Constraint.add((hierarchy_node, META.hierarchyRoot, URIRef(root)))
         else:
             mapping_dict = dim_dict.get("mapping")
             if mapping_dict.get("type") == "additive":
                 root_uri = mapping_dict.get("base") + root
-                self._graph.add((hierarchy_node, META.hierarchyRoot, URIRef(root_uri)))
+                self.Constraint.add((hierarchy_node, META.hierarchyRoot, URIRef(root_uri)))
             elif mapping_dict.get("type") == "replace":
                 root_uri = mapping_dict.get("replacements").get(root)
-                self._graph.add((hierarchy_node, META.hierarchyRoot, URIRef(root_uri)))
+                self.Constraint.add((hierarchy_node, META.hierarchyRoot, URIRef(root_uri)))
 
         name = hierarchy_dict.get("name")
-        self._graph.add((hierarchy_node, SCHEMA.name, Literal(name)))
+        self.Constraint.add((hierarchy_node, SCHEMA.name, Literal(name)))
 
         next_dict = hierarchy_dict.get("next-in-hierarchy")
         self._write_next_in_hierarchy(next_dict, parent_node=hierarchy_node)
@@ -806,23 +811,23 @@ class Cube:
 
     def _write_next_in_hierarchy(self, next_dict: dict, parent_node: BNode):
         next_node = BNode()
-        self._graph.add((next_node, SCHEMA.name, Literal(next_dict.get("name"))))
+        self.Constraint.add((next_node, SCHEMA.name, Literal(next_dict.get("name"))))
         
         # path from top to bottom
         if "path" in next_dict:
-            self._graph.add((next_node, SH.path, URIRef(next_dict.get("path"))))
+            self.Constraint.add((next_node, SH.path, URIRef(next_dict.get("path"))))
 
         # inverse path from bottom to top
         if "inverse-path" in next_dict:
             inverse_node = BNode()
-            self._graph.add((next_node, SH.path, inverse_node))
-            self._graph.add((inverse_node, SH.inversePath, URIRef(next_dict.get("inverse-path"))))
+            self.Constraint.add((next_node, SH.path, inverse_node))
+            self.Constraint.add((inverse_node, SH.inversePath, URIRef(next_dict.get("inverse-path"))))
         
         # target class of the next node
         if "target-class" in next_dict:
-            self._graph.add((next_node, SH.targetClass, URIRef(next_dict.get("target-class"))))
+            self.Constraint.add((next_node, SH.targetClass, URIRef(next_dict.get("target-class"))))
 
-        self._graph.add((parent_node, META.nextInHierarchy, next_node))
+        self.Constraint.add((parent_node, META.nextInHierarchy, next_node))
 
         if next_dict.get("next-in-hierarchy"):
             self._write_next_in_hierarchy(next_dict.get("next-in-hierarchy"), next_node)
@@ -830,7 +835,7 @@ class Cube:
     def _write_annotation(self, annotation_dict: dict, datatype: str) -> BNode:
         annotation_node = BNode()
         for lan, name in annotation_dict.get("name").items():
-            self._graph.add((annotation_node, SCHEMA.name, Literal(name, lang=lan)))
+            self.Constraint.add((annotation_node, SCHEMA.name, Literal(name, lang=lan)))
 
         if annotation_dict.get("context"):
             for dimension, context in annotation_dict.get("context").items():
@@ -838,26 +843,26 @@ class Cube:
 
                 context_node = self._write_context_node(dimension_dict, context)
 
-                self._graph.add((annotation_node, META.annotationContext, context_node))
+                self.Constraint.add((annotation_node, META.annotationContext, context_node))
 
         match annotation_dict.get("type"):
             case "limit":
-                self._graph.add((annotation_node, RDF.type, META.Limit))
+                self.Constraint.add((annotation_node, RDF.type, META.Limit))
                 value = self._sanitize_value(annotation_dict.get("value"), datatype=datatype)
-                self._graph.add((annotation_node, SCHEMA.value, value))
+                self.Constraint.add((annotation_node, SCHEMA.value, value))
             case "limit-range":
-                self._graph.add((annotation_node, RDF.type, META.Limit))
+                self.Constraint.add((annotation_node, RDF.type, META.Limit))
                 min_value = self._sanitize_value(annotation_dict.get("min-value"), datatype=datatype)
-                self._graph.add((annotation_node, SCHEMA.minValue, min_value))
+                self.Constraint.add((annotation_node, SCHEMA.minValue, min_value))
                 max_value = self._sanitize_value(annotation_dict.get("max-value"), datatype=datatype)
-                self._graph.add((annotation_node, SCHEMA.maxValue, max_value))
+                self.Constraint.add((annotation_node, SCHEMA.maxValue, max_value))
 
         return annotation_node
 
     def _write_context_node(self, dimension_dict: dict, context: Union[dict, int, float, str]):
         dimension_path = dimension_dict.get("path")
         context_node = BNode()
-        self._graph.add((context_node, SH.path, URIRef(self._base_uri + dimension_path)))
+        self.Constraint.add((context_node, SH.path, URIRef(self._base_uri + dimension_path)))
         type_of_mapping = dimension_dict.get("mapping").get("type")
 
         match context:
@@ -867,7 +872,7 @@ class Cube:
                         context = dimension_dict.get("mapping").get("base") + str(context)
                     case "replace":
                         context = dimension_dict.get("mapping").get("replacements").get(context)
-                self._graph.add((context_node, SH.hasValue, URIRef(context)))
+                self.Constraint.add((context_node, SH.hasValue, URIRef(context)))
             case dict():
                 # for now, assume that the context when given as dict is a min and max
                 _min = context.get("min")
@@ -879,8 +884,8 @@ class Cube:
                     case "replace":
                         _min = dimension_dict.get("mapping").get("base") + str(_min)
                         _max = dimension_dict.get("mapping").get("base") + str(_max)
-                self._graph.add((context_node, SH.minInclusive, URIRef(_min)))
-                self._graph.add((context_node, SH.maxInclusive, URIRef(_max)))
+                self.Constraint.add((context_node, SH.minInclusive, URIRef(_min)))
+                self.Constraint.add((context_node, SH.maxInclusive, URIRef(_max)))
 
         return context_node
     
@@ -896,8 +901,8 @@ class Cube:
         """
         list_node = BNode()
         unique_values = values.unique()
-        Collection(self._graph, list_node, [URIRef(vl) for vl in unique_values])
-        self._graph.add((dim_node, URIRef(SH + "in"), list_node))
+        Collection(self.Constraint.graph, list_node, [URIRef(vl) for vl in unique_values])
+        self.Constraint.add((dim_node, URIRef(SH + "in"), list_node))
 
     def _add_min_max(self, dim_dict: dict, dim_node: BNode, values: pd.Series):
         """Add minimum and maximum values to the given dimension node.
@@ -915,11 +920,11 @@ class Cube:
 
         # If dataype is XSD.date, use minInclusive and maxInclusive and the correct datatype
         if dim_dict.get("datatype") == "date":
-            self._graph.add((dim_node, SH.minInclusive, Literal(_min, datatype=XSD.date)))
-            self._graph.add((dim_node, SH.maxInclusive, Literal(_max, datatype=XSD.date)))
+            self.Constraint.add((dim_node, SH.minInclusive, Literal(_min, datatype=XSD.date)))
+            self.Constraint.add((dim_node, SH.maxInclusive, Literal(_max, datatype=XSD.date)))
         else:
-            self._graph.add((dim_node, SH.min, Literal(_min)))
-            self._graph.add((dim_node, SH.max, Literal(_max)))
+            self.Constraint.add((dim_node, SH.min, Literal(_min)))
+            self.Constraint.add((dim_node, SH.max, Literal(_max)))
 
     @staticmethod
     def _sanitize_value(value, datatype, lang=None) -> Literal|URIRef:
@@ -968,14 +973,14 @@ class Cube:
         # Remark: standalone-cube-constraint contains standalone-constraint-constraint!
         shacl_graph = Graph()
         shacl_graph.parse("https://cube.link/latest/shape/standalone-cube-constraint", format="turtle")
-        valid_cube, results_graph_cube, text_cube = validate(data_graph=self._graph, shacl_graph=shacl_graph)
+        valid_cube, results_graph_cube, text_cube = validate(data_graph=self.Constraint.graph, shacl_graph=shacl_graph)
 
         # third step: self-consistency
         # to do this, add the cube:Observations as target of the cube:Constraint
-        self._graph.add((self._shape_URI, SH.targetClass, CUBE.Observation))
-        consistent, results_graph_consistency, text_consistency = validate(data_graph=self._graph)
+        self.Constraint.add((self._shape_URI, SH.targetClass, CUBE.Observation))
+        consistent, results_graph_consistency, text_consistency = validate(data_graph=self.Observation.graph, shacl_graph=self.Constraint.graph)
         # remove the target again
-        self._graph.remove((self._shape_URI, SH.targetClass, CUBE.Observation))
+        self.Constraint.remove((self._shape_URI, SH.targetClass, CUBE.Observation))
 
         if serialize_results:
             results_graph = results_graph_cube + results_graph_consistency
@@ -991,7 +996,7 @@ class Cube:
         shacl_graph = Graph()
         shacl_graph.parse("https://cube.link/latest/shape/profile-visualize", format="turtle")
 
-        valid, results_graph, text = validate(data_graph=self._graph, shacl_graph=shacl_graph)
+        valid, results_graph, text = validate(data_graph=(self.Cube.graph + self.Constraint.graph), shacl_graph=shacl_graph)
 
         if serialize_results:
             results_graph.serialize("./validation_results.ttl", format="turtle")
@@ -1000,19 +1005,19 @@ class Cube:
     def _add_opendata_profile(self):
         names = self._cube_dict.get("Name")
         for lan, name in names.items():
-            self._graph.add((self._cube_uri, SCHEMA.name, Literal(name, lang=lan)))
+            self.Cube.add((self._cube_uri, SCHEMA.name, Literal(name, lang=lan)))
 
         descriptions = self._cube_dict.get("Description")
         for lan, desc in descriptions.items():
-            self._graph.add((self._cube_uri, DCT.description, Literal(desc, lang=lan)))
+            self.Cube.add((self._cube_uri, DCT.description, Literal(desc, lang=lan)))
 
-        self._graph.add((self._cube_uri, SCHEMA.workExample, URIRef("https://ld.admin.ch/application/opendataswiss")))
+        self.Cube.add((self._cube_uri, SCHEMA.workExample, URIRef("https://ld.admin.ch/application/opendataswiss")))
 
     def _validate_opendata_profile(self, serialize_results=False):
         shacl_graph = Graph()
         shacl_graph.parse("https://cube.link/latest/shape/profile-opendataswiss-lindas", format="turtle")
 
-        valid, results_graph, text = validate(data_graph=self._graph, shacl_graph=shacl_graph)
+        valid, results_graph, text = validate(data_graph=self.Cube.graph, shacl_graph=shacl_graph)
 
         if serialize_results:
             results_graph.serialize("./validation_results.ttl", format="turtle")

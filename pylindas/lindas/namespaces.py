@@ -1,4 +1,4 @@
-from rdflib import Graph, Namespace
+from rdflib import Namespace
 
 
 CUBE = Namespace("https://cube.link/")

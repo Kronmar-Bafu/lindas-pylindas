@@ -30,6 +30,16 @@ class TestClass:
         self.func_mapping_cube = self.setup_test_cube(
             "Population_Aargau/data.csv", "Population_Aargau/description.yml"
         )
+        self.concepts_cube = self.setup_test_cube(
+            "concept_table_airport/data.csv","concept_table_airport/description.yml"
+        )
+
+        self.mock_cube.serialize("mock/cube_test.ttl")
+        self.co2_cube.serialize("co2-limits/cube_test.ttl")
+        self.hierarchies_cube.serialize("Biotope_Statistik/cube_test.ttl")
+        self.target_timespan_cube.serialize("greenhouse_limit/cube_test.ttl")
+        self.func_mapping_cube.serialize("Population_Aargau/cube_test.ttl")
+        self.concepts_cube.serialize("concept_table_airport/cube_test.ttl")
 
     def test_standard_error(self):
         sparql = (
@@ -49,7 +59,7 @@ class TestClass:
             "}"
         )
 
-        result = self.mock_cube._graph.query(sparql)
+        result = self.mock_cube.Constraint.query(sparql)
         if not result:
             self.mock_cube.serialize("faulty_test_standard_error.ttl")
         assert bool(result)
@@ -120,7 +130,7 @@ class TestClass:
             "}"
         )
     
-        result = self.co2_cube._graph.query(sparql)
+        result = self.co2_cube.Constraint.query(sparql)
         if not result:
             self.co2_cube.serialize("faulty_graph_test_point_limit.ttl")
         assert bool(result)
@@ -147,7 +157,7 @@ class TestClass:
             "}"
         )
 
-        result = self.co2_cube._graph.query(sparql)
+        result = self.co2_cube.Constraint.query(sparql)
         if not result:
             self.co2_cube.serialize("faulty_graph_test_range_limit.ttl")
         assert bool(result)
@@ -174,7 +184,7 @@ class TestClass:
             "}"
         )
 
-        result = self.mock_cube._graph.query(sparql)
+        result = self.mock_cube.Constraint.query(sparql)
         if not result:
             self.mock_cube.serialize("faulty_graph_test_annotation_dimension.ttl")
         assert bool(result)
@@ -200,7 +210,7 @@ class TestClass:
             "}"
         )
 
-        result = self.hierarchies_cube._graph.query(sparql)
+        result = self.hierarchies_cube.Constraint.query(sparql)
         if not result:
             self.hierarchies_cube.serialize("faulty_graph_test_hierarchies.ttl")
         assert bool(result)
@@ -210,11 +220,6 @@ class TestClass:
         assert result_message == "Cube is valid."
 
     def test_concepts(self):
-        # As setup_method() is called before each test
-        # -> create the concept cube only for this specific test
-        # To change later if needed
-        self.concepts_cube = self.setup_test_cube("concept_table_airport/data.csv", "concept_table_airport/description.yml")
-
         # Add the concept data to the cube's data
         airport_concept_df = pd.read_csv(self.TEST_CASE_PATH + "/concept_table_airport/airportconcept.csv")
         self.concepts_cube.write_concept("typeOfAirport", airport_concept_df)
@@ -222,16 +227,16 @@ class TestClass:
         # the goal is to demonstrate that the  check_dimension_object_property() called here under will detect that
         # Check that all the generated URLs for the typeOfAirport are resources (concept) with a SCHEMA.name triple
         # This allows to check if all the entries in data_with_dummy.csv correspond to an entry in airportType.csv 
-        allConceptsFound = self.concepts_cube.check_dimension_object_property("typeOfAirport", SCHEMA.name)
+        all_concepts_found = self.concepts_cube.check_dimension_object_property("typeOfAirport", SCHEMA.name)
         # allConceptsFound should be False: the dummy airport type has no correspondance in the concepts
-        assert not bool(allConceptsFound)
+        assert not bool(all_concepts_found)
 
         # Now add the dummy airportType 
         airport_concept_dummy_df = pd.read_csv("example/Cubes/concept_table_airport/airportdummyconcept.csv")
         self.concepts_cube.write_concept("typeOfAirport", airport_concept_dummy_df)
-        allConceptsFound = self.concepts_cube.check_dimension_object_property("typeOfAirport", SCHEMA.name)
+        all_concepts_found = self.concepts_cube.check_dimension_object_property("typeOfAirport", SCHEMA.name)
         # allConceptsFound should be True: the dummy airport type has been added to the concepts
-        assert bool(allConceptsFound)
+        assert bool(all_concepts_found)
 
     def test_timespan_limit(self):
         sparql = (
@@ -251,7 +256,7 @@ class TestClass:
             "}"
         )
 
-        result = self.target_timespan_cube._graph.query(sparql)
+        result = self.target_timespan_cube.Constraint.query(sparql)
         if not result:
             self.target_timespan_cube.serialize("faulty_graph_test_timespan_limit.ttl")
         assert bool(result)
@@ -262,14 +267,15 @@ class TestClass:
 
     def test_func_mapping(self):
         sparql = (
-            "SELECT ?geo"
+            "SELECT ?geometry"
             "{"
             "  <https://ld.admin.ch/bfh/cube/poc_ag/1/shape> sh:property ?prop . "
             "  ?prop sh:path <https://ld.admin.ch/bfh/region> ;"
             "     sh:in/rdf:rest*/rdf:first ?geo"
             "}"
         )
-        result = self.func_mapping_cube._graph.query(sparql)
+        result = self.func_mapping_cube.Constraint.query(sparql)
+
         geos = {"https://ld.admin.ch/canton/19", "https://ld.admin.ch/district/1901",
                 "https://ld.admin.ch/municipality/4001", "https://ld.admin.ch/municipality/4002",
                 "https://ld.admin.ch/municipality/4003", "https://ld.admin.ch/municipality/4004",
@@ -280,7 +286,7 @@ class TestClass:
                 "https://ld.admin.ch/municipality/4013"}
 
         for row in result:
-            if str(row.geo) in geos:
+            if str(row.geometry) in geos:
                 assert True
             else:
                 with open("faulty_func.txt", "a") as f:
