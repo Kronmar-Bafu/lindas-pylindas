@@ -902,13 +902,9 @@ class Cube:
         _min = values.min()
         _max = values.max()
 
-        # If dataype is XSD.date, use minInclusive and maxInclusive and the correct datatype
-        if dim_dict.get("datatype") == "date":
-            self._graph.add((dim_node, SH.minInclusive, Literal(_min, datatype=XSD.date)))
-            self._graph.add((dim_node, SH.maxInclusive, Literal(_max, datatype=XSD.date)))
-        else:
-            self._graph.add((dim_node, SH.min, Literal(_min)))
-            self._graph.add((dim_node, SH.max, Literal(_max)))
+        _datatype = dim_dict.get("datatype")
+        self._graph.add((dim_node, SH.minInclusive, Literal(_min, datatype=XSD[_datatype])))
+        self._graph.add((dim_node, SH.maxInclusive, Literal(_max, datatype=XSD[_datatype])))
 
     @staticmethod
     def _sanitize_value(value, datatype, lang=None) -> Literal|URIRef:
