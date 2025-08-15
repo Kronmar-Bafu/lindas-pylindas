@@ -700,11 +700,11 @@ class Cube:
             case "nominal":
                 self._graph.add((dim_node, QUDT.scaleType, QUDT.NominalScale))
                 if dim_dict.get("dimension-type") == "Key Dimension":
-                    self._add_sh_list(dim_node, values)
+                    self._add_sh_list(dim_dict, dim_node, values)
             case "ordinal":
                 self._graph.add((dim_node, QUDT.scaleType, QUDT.OrdinalScale))
                 if dim_dict.get("dimension-type") == "Key Dimension":
-                    self._add_sh_list(dim_node, values)
+                    self._add_sh_list(dim_dict, dim_node, values)
             case "interval":
                 self._graph.add((dim_node, QUDT.scaleType, QUDT.IntervalScale))
                 self._add_min_max(dim_dict, dim_node, values)
@@ -878,7 +878,7 @@ class Cube:
 
         return context_node
     
-    def _add_sh_list(self, dim_node: BNode, values: pd.Series):
+    def _add_sh_list(self, dimension_dict: dict, dim_node: BNode, values: pd.Series):
         """Add a SHACL list of all unique values to the given dimension node.
         
             Args:
@@ -890,7 +890,10 @@ class Cube:
         """
         list_node = BNode()
         unique_values = values.unique()
-        Collection(self._graph, list_node, [URIRef(vl) for vl in unique_values])
+        if dimension_dict.get("datatype") == "URI":
+            Collection(self._graph, list_node, [URIRef(vl) for vl in unique_values])
+        else:
+            Collection(self._graph, list_node, [Literal(vl, datatype=XSD[dimension_dict.get("datatype")]) for vl in unique_values])
         self._graph.add((dim_node, URIRef(SH + "in"), list_node))
 
     def _add_min_max(self, dim_dict: dict, dim_node: BNode, values: pd.Series):
