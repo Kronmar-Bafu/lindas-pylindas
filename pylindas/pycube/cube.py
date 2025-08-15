@@ -239,7 +239,12 @@ class Cube:
             None
         """
         def make_iri(row):
-            return self._cube_uri + "/observation/" + "_".join([quote(str(row[key_dim])) for key_dim in self._key_dimensions])
+            parts = [
+            quote(str(row[key_dim]), safe="")  # safe="" means *everything* that’s not unreserved will be encoded
+            for key_dim in self._key_dimensions
+            ]
+            return f"{self._cube_uri}/observation/{'_'.join(parts)}"
+        
         self._dataframe['obs-uri'] = self._dataframe.apply(
             make_iri, axis=1
         )
