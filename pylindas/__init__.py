@@ -4,4 +4,4 @@ from pylindas.lindas.namespaces import Namespaces
 from pylindas.lindas.upload import upload_ttl
 from pylindas.lindas.query import query_lindas
 
-__version__ = "0.6.4"
+__version__ = "0.6.5"
