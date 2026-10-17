@@ -9,6 +9,7 @@
 - [Installation](docs/installation.md)
 - [Contributing](docs/contributing.md)
 - [Basic functionality](docs/functionality.md)
+- [Parameters](docs/yaml.md)
 - [Command line usage](docs/cli.md)
 - [Examples](docs/examples.md)
 - [URIs](docs/uris.md)
