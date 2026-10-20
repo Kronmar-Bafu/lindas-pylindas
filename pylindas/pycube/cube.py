@@ -182,7 +182,12 @@ class Cube:
         Returns:
             None
         """
-        self._base_uri = URIRef(cube_yaml.get("Base-URI"))
+        # Normalize the base URI by stripping any trailing slashes so that
+        # URI construction can consistently add a single "/" separator. This
+        # avoids malformed URIs regardless of whether the user supplied a
+        # trailing slash in the "Base-URI" (see issue #76).
+        base_uri = str(cube_yaml.get("Base-URI")).rstrip("/")
+        self._base_uri = URIRef(base_uri)
         self._cube_dict = cube_yaml
 
     def _setup_cube_uri(self, local: bool, environment="TEST") ->  Tuple[URIRef, URIRef]:
@@ -224,7 +229,9 @@ class Cube:
         for prefix, nmspc in Namespaces.items():
             graph.bind(prefix=prefix, namespace=nmspc)
         try:
-            graph.bind(prefix=self._cube_dict.get("Namespace"), namespace=Namespace(self._base_uri))
+            # Bind the namespace with a trailing slash so that predicate URIs
+            # (constructed as base + "/" + path) are abbreviated with the prefix.
+            graph.bind(prefix=self._cube_dict.get("Namespace"), namespace=Namespace(str(self._base_uri) + "/"))
         except KeyError:
             print("no Namespace")
             pass
@@ -420,7 +427,7 @@ class Cube:
 
         for column in obs.keys():
             shape_column = self._get_shape_column(column)
-            path = URIRef(self._base_uri + shape_column.get("path"))
+            path = URIRef(self._base_uri + "/" + shape_column.get("path"))
             sanitized_value = self._sanitize_value(obs.get(column), shape_column.get("datatype"), shape_column.get("language"))
             self._graph.add((obs.name, URIRef(path), sanitized_value))
 
@@ -593,7 +600,7 @@ class Cube:
     def check_dimension_object_property(self, dimension_name: str, property: URIRef) -> bool:
         try:
             dimension = self._get_shape_column(dimension_name) # raises an exception if dimension not found
-            path = URIRef(self._base_uri + dimension.get("path"))
+            path = URIRef(self._base_uri + "/" + dimension.get("path"))
 
             # Prepare the SPARQL query
             query = f"""
@@ -648,7 +655,7 @@ class Cube:
         for lan, desc in dim_dict.get("description").items():
             self._graph.add((dim_node, SCHEMA.description, Literal(desc, lang=lan)))
         
-        self._graph.add((dim_node, SH.path, URIRef(self._base_uri + dim_dict.get("path"))))
+        self._graph.add((dim_node, SH.path, URIRef(self._base_uri + "/" + dim_dict.get("path"))))
 
         if dim_dict.get("datatype") == "URI":
             self._graph.add((dim_node, SH.nodeKind, SH.IRI))
@@ -670,7 +677,7 @@ class Cube:
                 relation_node = BNode()
                 relation_path = dim_dict.get("relates-to")
                 self._graph.add((relation_node, RDF.type, RELATION.StandardError))
-                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
+                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + "/" + relation_path)))
                 self._graph.add((dim_node, META.dimensionRelation, relation_node))
                 self._graph.add((dim_node, SH.nodeKind, SH.Literal))
             
@@ -679,7 +686,7 @@ class Cube:
                 relation_node = BNode()
                 relation_path = dim_dict.get("relates-to")
                 self._graph.add((relation_node, RDF.type, RELATION.ConfidenceUpperBound))
-                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
+                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + "/" + relation_path)))
                 self._graph.add((dim_node, META.dimensionRelation, relation_node))
                 self._graph.add((dim_node, SH.nodeKind, SH.Literal))
                 self._graph.add((relation_node, DCT.type, Literal("Confidence interval")))
@@ -688,7 +695,7 @@ class Cube:
                 relation_node = BNode()
                 relation_path = dim_dict.get("relates-to")
                 self._graph.add((relation_node, RDF.type, RELATION.ConfidenceLowerBound))
-                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + relation_path)))
+                self._graph.add((relation_node, META.relatesTo, URIRef(self._base_uri + "/" + relation_path)))
                 self._graph.add((dim_node, META.dimensionRelation, relation_node))
                 self._graph.add((dim_node, SH.nodeKind, SH.Literal))
                 self._graph.add((relation_node, DCT.type, Literal("Confidence interval")))
@@ -851,7 +858,7 @@ class Cube:
     def _write_context_node(self, dimension_dict: dict, context: Union[dict, int, float, str]):
         dimension_path = dimension_dict.get("path")
         context_node = BNode()
-        self._graph.add((context_node, SH.path, URIRef(self._base_uri + dimension_path)))
+        self._graph.add((context_node, SH.path, URIRef(self._base_uri + "/" + dimension_path)))
         type_of_mapping = dimension_dict.get("mapping").get("type")
 
         match context:
