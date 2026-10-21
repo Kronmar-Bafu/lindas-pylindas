@@ -12,6 +12,8 @@ from datetime import datetime
 from typing import Dict, Any, List
 from jsonschema import Draft202012Validator
 
+from pylindas.lindas.paths import safe_path
+
 import logging
 
 logger = logging.getLogger('pycube')
@@ -197,9 +199,10 @@ class DataEuropaFetcher(object):
 
         metadata = self._extract_metadata(data)
 
-        data_csv_filename = os.path.join(output_dir, 'data.csv')
-        description_json_filename = os.path.join(output_dir, 'description.json')
-        frictionless_json_filename = os.path.join(output_dir, 'frictionless.json')
+        safe_output_dir = safe_path(output_dir) if output_dir else os.getcwd()
+        data_csv_filename = safe_path('data.csv', base_dir=safe_output_dir)
+        description_json_filename = safe_path('description.json', base_dir=safe_output_dir)
+        frictionless_json_filename = safe_path('frictionless.json', base_dir=safe_output_dir)
 
         distributions = self._get_distributions(data['result']['distributions'])
 
@@ -217,7 +220,7 @@ class DataEuropaFetcher(object):
         description = self._transform_metadata(metadata, distributions['frictionless'])
         schema_path = os.path.relpath(
             description_schema_path,
-            start=os.path.join(os.getcwd(), output_dir)
+            start=safe_output_dir
         )
         description = {
             "$schema": f"{schema_path}",
@@ -247,9 +250,11 @@ python cli.py serialize {output_dir} {os.path.join(output_dir, 'cube.ttl')}"""
 
 
 def fetch(input_url: str, output_dir: str):
-    # create the output dir if it does not exist
-    if output_dir and not os.path.exists(output_dir):
-        os.makedirs(output_dir, exist_ok=True)
+    # create the output dir if it does not exist, validating it stays within cwd
+    if output_dir:
+        output_dir = safe_path(output_dir)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir, exist_ok=True)
 
     if input_url.startswith('https://data.europa.eu'):
         fetcher = DataEuropaFetcher()
