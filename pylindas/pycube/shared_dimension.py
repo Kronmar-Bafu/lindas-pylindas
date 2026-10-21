@@ -2,7 +2,7 @@ from rdflib import Graph, Literal, RDF, URIRef
 from shapely.geometry import shape
 import json
 
-from pylindas.lindas.paths import safe_path
+from pylindas.lindas.paths import reject_traversal
 
 
 class GeoSharedDimension(object):
@@ -64,8 +64,8 @@ class GeoSharedDimension(object):
 
 
 def convert_geojson_to_ttl(geojson_filename, ttl_filename):
-    geojson_filename = safe_path(geojson_filename)
-    ttl_filename = safe_path(ttl_filename)
+    reject_traversal(geojson_filename)
+    reject_traversal(ttl_filename)
     with open(geojson_filename, 'r') as f:
         geojson_data = json.load(f)
 

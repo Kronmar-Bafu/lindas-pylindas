@@ -8,17 +8,19 @@ from pylindas import Cube
 from pylindas.fetch import fetch
 from pylindas.example import list_examples, load_example
 from pylindas.pycube.shared_dimension import convert_geojson_to_ttl
-from pylindas.lindas.paths import safe_path
+from pylindas.lindas.paths import reject_traversal
 
 
 logger = logging.getLogger('pycube')
 
 
 def serialize(input_directory: str, output_ttl: str, na_values: list[str], sep: str = ",", decimal: str = "."):
-    input_directory = safe_path(input_directory)
-    csv_path = safe_path("data.csv", base_dir=input_directory)
-    yml_path = safe_path("description.yml", base_dir=input_directory)
-    json_path = safe_path("description.json", base_dir=input_directory)
+    reject_traversal(input_directory)
+    reject_traversal(output_ttl)
+
+    csv_path = os.path.join(input_directory, "data.csv")
+    yml_path = os.path.join(input_directory, "description.yml")
+    json_path = os.path.join(input_directory, "description.json")
 
     if os.path.exists(yml_path):
         with open(yml_path) as file:
@@ -36,7 +38,7 @@ def serialize(input_directory: str, output_ttl: str, na_values: list[str], sep: 
     cube.write_cube()
     cube.write_observations()
     cube.write_shape()
-    cube.serialize(safe_path(output_ttl))
+    cube.serialize(output_ttl)
     print(cube)
 
 
@@ -136,10 +138,10 @@ def main():
             description_schema_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'description.schema.json')
             with open(description_schema_path, 'r') as f:
                 schema = f.read()
-            output_path = safe_path(args.output)
-            with open(output_path, 'w') as f:
+            reject_traversal(args.output)
+            with open(args.output, 'w') as f:
                 f.write(schema)
-                logger.debug(f"Imported description into current directory: {output_path}")
+                logger.debug(f"Imported description into current directory: {args.output}")
 
 
 
