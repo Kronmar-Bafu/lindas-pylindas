@@ -2,12 +2,12 @@ import argparse
 import os
 import pandas as pd
 import yaml
-import py_cube
 import logging
 
-from py_cube.fetch import fetch
-from py_cube.example import list_examples, load_example
-from py_cube.cube.shared_dimension import convert_geojson_to_ttl
+from pylindas import Cube
+from pylindas.fetch import fetch
+from pylindas.example import list_examples, load_example
+from pylindas.pycube.shared_dimension import convert_geojson_to_ttl
 
 
 logger = logging.getLogger('pycube')
@@ -29,7 +29,7 @@ def serialize(input_directory: str, output_ttl: str, na_values: list[str], sep: 
 
     df = pd.read_csv(csv_path, na_values=na_values, sep=sep, decimal=decimal)
 
-    cube = py_cube.Cube(dataframe=df, cube_yaml=cube_yaml, environment="TEST", local=True)
+    cube = Cube(dataframe=df, cube_yaml=cube_yaml, environment="TEST", local=True)
     cube.prepare_data()
     cube.write_cube()
     cube.write_observations()
@@ -103,9 +103,9 @@ def main():
 
     schema_parser = subparsers.add_parser("schema", help="Schema operations")
     schema_subparsers = schema_parser.add_subparsers(dest="suboperation", help="Schema sub-operations")
-    schema_subparsers.add_parser("import", help="Import the description schema file")
-    schema_parser.add_argument("output", type=str, help="Output file")
-    schema_parser.add_argument("-v", "--verbose", action="count", default=0, help="Increase verbosity")
+    import_parser = schema_subparsers.add_parser("import", help="Import the description schema file")
+    import_parser.add_argument("output", type=str, help="Output file")
+    import_parser.add_argument("-v", "--verbose", action="count", default=0, help="Increase verbosity")
 
 
     args = parser.parse_args()
@@ -130,7 +130,7 @@ def main():
         if args.suboperation == "convert_geojson":
             convert_geojson_to_ttl(args.input_geojson, args.output_ttl)
     elif args.operation == 'schema':
-        if args.suboperation == "import-description":
+        if args.suboperation == "import":
             description_schema_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'description.schema.json')
             with open(description_schema_path, 'r') as f:
                 schema = f.read()

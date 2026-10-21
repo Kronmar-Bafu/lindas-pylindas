@@ -1,5 +1,4 @@
 from pylindas.shared_dimension_queries.shared_dimensions_queries import list_shared_dimensions, list_shared_dimension_terms, list_shared_dimensions_print, print_sparql_result
-from rdflib import URIRef
 
 """
 Author: Fabian Cretton - HEVS

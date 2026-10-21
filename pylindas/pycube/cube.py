@@ -1,3 +1,4 @@
+import logging
 import re
 from urllib.parse import quote
 from rdflib import BNode, Graph, Literal, RDF, URIRef, XSD, DCTERMS
@@ -11,11 +12,28 @@ except ImportError:
     Self = TypeVar("Self", bound="Cube")
 from typing import Tuple, Union, Callable
 import pandas as pd
-import numbers
-import sys
-from pylindas.lindas.namespaces import *
+from rdflib import Namespace
+from pylindas.lindas.namespaces import (
+    CUBE,
+    DCAT,
+    DCT,
+    META,
+    Namespaces,
+    QUDT,
+    RELATION,
+    SCHEMA,
+    SH,
+    TIME,
+    UNIT,
+    VCARD,
+    VOID,
+)
 from pylindas.lindas.query import query_lindas
+from pylindas.lindas.exceptions import CubeAlreadyExistsError
 from pyshacl import validate
+
+logger = logging.getLogger('pycube')
+
 
 class Cube:
     _base_uri: URIRef
@@ -203,7 +221,7 @@ class Cube:
         query = f"ASK {{ <{cube_uri}> ?p ?o}}"
         if not local:
             if query_lindas(query, environment=environment) == True:
-                sys.exit("Cube already exist! Please update your yaml")
+                raise CubeAlreadyExistsError(cube_uri)
 
         return URIRef(cube_uri), URIRef(cube_uri_no_version)
     
@@ -233,7 +251,7 @@ class Cube:
             # (constructed as base + "/" + path) are abbreviated with the prefix.
             graph.bind(prefix=self._cube_dict.get("Namespace"), namespace=Namespace(str(self._base_uri) + "/"))
         except KeyError:
-            print("no Namespace")
+            logger.error("no Namespace")
             pass
         return graph
 
@@ -246,17 +264,29 @@ class Cube:
             None
         """
         def make_iri(row):
-            parts = [
-            quote(str(row[key_dim]), safe="")  # safe="" means *everything* that’s not unreserved will be encoded
-            for key_dim in self._key_dimensions
-            ]
-            return f"{self._cube_uri}/observation/{'_'.join(parts)}"
-        
+            return Cube._make_obs_iri(
+                self._cube_uri,
+                [row[key_dim] for key_dim in self._key_dimensions],
+            )
+
         self._dataframe['obs-uri'] = self._dataframe.apply(
             make_iri, axis=1
         )
+        # _make_obs_iri already returns URIRef values; mapping URIRef is
+        # idempotent and kept to guarantee behavior-preserving index contents.
         self._dataframe['obs-uri'] = self._dataframe['obs-uri'].map(URIRef)
         self._dataframe = self._dataframe.set_index("obs-uri")
+
+    @staticmethod
+    def _make_obs_iri(cube_uri, key_values: list) -> URIRef:
+        """Build an observation URI from a cube URI and ordered key values.
+
+        Percent-encodes each key value (``safe=""`` encodes everything that is
+        not unreserved), joins them with ``_`` in order, and wraps the result as
+        a ``URIRef``.
+        """
+        parts = [quote(str(v), safe="") for v in key_values]
+        return URIRef(f"{cube_uri}/observation/{'_'.join(parts)}")
 
     # Function for dynamic replacement of column names, in between {} by effective column values in a row
     #   template example: http://the_cube_uri/concept/airport_type/{typeOfAirport}/{typeOfAirport2nd}
@@ -434,7 +464,7 @@ class Cube:
     def _get_shape_column(self, column: str):
         c = self._shape_dict.get(column)
         if not c:
-            print(self._shape_dict)
+            logger.debug(self._shape_dict)
             raise ValueError(f'Could not find {column}')
         return c
 
@@ -473,13 +503,13 @@ class Cube:
             self
         """
         if not "Concepts" in self._cube_dict:
-            print(f"Error: call to write_concept() but the cube's information do not contain a \"Concepts\" key! The \"{concept_key}\" concepts will not be added to the graph.")
+            logger.error(f"Error: call to write_concept() but the cube's information do not contain a \"Concepts\" key! The \"{concept_key}\" concepts will not be added to the graph.")
             return self
         
         concepts = self._cube_dict.get("Concepts")
 
         if not concept_key in concepts:
-            print(f"Error: call to write_concept() but the cube's information do not contain a \"{concept_key}\" nested key under the \"Concepts\" key! The \"{concept_key}\" concepts will not be added to the graph.")
+            logger.error(f"Error: call to write_concept() but the cube's information do not contain a \"{concept_key}\" nested key under the \"Concepts\" key! The \"{concept_key}\" concepts will not be added to the graph.")
             return self
 
         concept = concepts.get(concept_key)
@@ -614,25 +644,25 @@ class Cube:
             # Execute the query
             results = self._graph.query(query)
 
-            print("\nChecking links to concept table")
-            print("--------------------------------") 
-            print("Checking that objects of the '" + dimension_name + "' dimension link to a concept with a '" + str(property) + "' property")
-      
-            # Print the objects that have no match with that property
+            logger.info("\nChecking links to concept table")
+            logger.info("--------------------------------")
+            logger.info("Checking that objects of the '" + dimension_name + "' dimension link to a concept with a '" + str(property) + "' property")
+
+            # Log the objects that have no match with that property
             allValuesFound = True
             if results: 
                 allValuesFound = False
-                print("Result: problem with the following concept(s):")
+                logger.info("Result: problem with the following concept(s):")
                 for row in results:
-                    print("- ", row["obj"])
+                    logger.info("- %s", row["obj"])
             else:
-                print("Result: no problem found")
-                
-            print("--------------------------------") 
+                logger.info("Result: no problem found")
+
+            logger.info("--------------------------------")
 
             return allValuesFound
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
             return False
 
     def _write_dimension_shape(self, dim_dict: dict, values: pd.Series) -> BNode:
@@ -701,7 +731,7 @@ class Cube:
                 self._graph.add((relation_node, DCT.type, Literal("Confidence interval")))
 
             case _ as unrecognized:
-                print(f"Dimension Type '{unrecognized}' is not recognized")
+                logger.error(f"Dimension Type '{unrecognized}' is not recognized")
         
         match dim_dict.get("scale-type"):
             case "nominal":
@@ -719,7 +749,7 @@ class Cube:
                 self._graph.add((dim_node, QUDT.scaleType, QUDT.RatioScale))
                 self._add_min_max(dim_dict, dim_node, values)
             case _ as unrecognized:
-                print(f"Scale Type '{unrecognized}' is not recognized")
+                logger.error(f"Scale Type '{unrecognized}' is not recognized")
         
         
         # unit from https://www.qudt.org/doc/DOC_VOCAB-UNITS.html

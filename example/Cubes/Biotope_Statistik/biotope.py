@@ -6,7 +6,6 @@ import os
 
 from pylindas.pycube import Cube
 from pylindas.lindas.upload import upload_ttl
-from pylindas.lindas.query import cube_exists
 
 BASEDIR = os.path.dirname(__file__)
 DATAFILE = os.path.join(BASEDIR, "data.csv")

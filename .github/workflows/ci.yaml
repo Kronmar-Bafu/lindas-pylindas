@@ -40,3 +40,15 @@ jobs:
         PYTHONUTF8: 1
       run: |
         pytest -s -vv tests example/Cubes/Biotope_Statistik/biotope.py example/Cubes/concept_table_airport/airport.py example/Cubes/mock/mock.py example/Shared_Dimensions/shared_dimension_generation/sd_example.py
+
+  lint:
+    name: 🧹 Ruff lint
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ruff
+      - run: ruff check .

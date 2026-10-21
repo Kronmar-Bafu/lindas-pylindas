@@ -10,8 +10,7 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Any, List
-from jsonschema import Draft202012Validator, validate
-from jsonschema.exceptions import ValidationError
+from jsonschema import Draft202012Validator
 
 import logging
 
@@ -256,4 +255,4 @@ def fetch(input_url: str, output_dir: str):
         fetcher = DataEuropaFetcher()
         fetcher.fetch_dataset(input_url, output_dir)
     else:
-        raise ValueError(f'Only supporting datasets from data.europa.eu at the moment, make sure your input URL starts with https://data.europa.eu')
+        raise ValueError('Only supporting datasets from data.europa.eu at the moment, make sure your input URL starts with https://data.europa.eu')

@@ -5,8 +5,6 @@ import yaml
 import os
 
 from pylindas.pyshareddimension import SharedDimension
-from pylindas.lindas.upload import upload_ttl
-from pylindas.lindas.query import cube_exists
 
 BASEDIR = os.path.dirname(__file__)
 DIMENSIONFILE = os.path.join(BASEDIR, "sd_terms.csv")

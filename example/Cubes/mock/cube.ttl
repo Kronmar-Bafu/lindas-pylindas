@@ -4,8 +4,9 @@
 @prefix meta: <https://cube.link/meta/> .
 @prefix mock: <https://mock.ld.admin.ch/> .
 @prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix relation: <https://cube.link/relation/> .
-@prefix schema1: <http://schema.org/> .
+@prefix schema: <http://schema.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix time: <http://www.w3.org/2006/time#> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
@@ -13,517 +14,524 @@
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1> a void:Dataset,
-        schema1:Dataset,
+<https://mock.ld.admin.ch/mock-example/1> a void:Dataset,
+        schema:Dataset,
         dcat:Dataset,
         cube:Cube ;
     dct:accrualPeriodicity <http://publications.europe.eu/resource/authority/frequency/ANNUAL> ;
     dct:creator <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    dct:description "Ein Beispiel Cube, der simulierte Daten enthält"@de,
+    dct:identifier "mock-example" ;
+    schema:contactPoint [ a schema:ContactPoint ;
+            schema:email "contact@mock.ld.admin.ch"^^xsd:string ;
+            schema:name "Bundesamt für Mock Data"^^xsd:string ] ;
+    schema:contributor <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
+    schema:creativeWorkStatus <https://ld.admin.ch/vocabulary/CreativeWorkStatus/Draft> ;
+    schema:creator <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
+    schema:dateCreated "2024-08-26"^^xsd:date ;
+    schema:dateModified "2026-10-21T12:00:18+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-10-21"^^xsd:date ;
+    schema:description "Ein Beispiel Cube, der simulierte Daten enthält"@de,
         "An example Cube containing some simulated data"@en ;
-    dct:title "Mock Cube"@de,
+    schema:name "Mock Cube"@de,
         "Mock Cube"@en,
         "Mock Cube"@fr,
         "Mock Cube"@it ;
-    schema1:contactPoint [ a schema1:ContactPoint ;
-            schema1:email "contact@mock.ld.admin.ch"^^xsd:string ;
-            schema1:name "Bundesamt für Mock Data"^^xsd:string ] ;
-    schema1:contributor <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    schema1:creativeWorkStatus <https://ld.admin.ch/vocabulary/CreativeWorkStatus/Draft> ;
-    schema1:creator <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    schema1:dateCreated "2024-08-26"^^xsd:date ;
-    schema1:dateModified "2025-01-23T15:33:37+00:00"^^xsd:dateTime ;
-    schema1:datePublished "2025-01-23"^^xsd:date ;
-    schema1:description "Ein Beispiel Cube, der simulierte Daten enthält"@de,
-        "An example Cube containing some simulated data"@en ;
-    schema1:name "Mock Cube"@de,
-        "Mock Cube"@en,
-        "Mock Cube"@fr,
-        "Mock Cube"@it ;
-    schema1:publisher <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    schema1:version 1 ;
-    schema1:workExample <https://ld.admin.ch/application/visualize> ;
+    schema:publisher <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
+    schema:version 1 ;
+    schema:workExample <https://ld.admin.ch/application/visualize> ;
     dcat:contactPoint [ a vcard:Organization ;
             vcard:fn "Bundesamt für Mock Data"^^xsd:string ;
             vcard:hasEmail "contact@mock.ld.admin.ch"^^xsd:string ] ;
-    cube:observationConstraint <https://mock.ld.admin.ch/cube/mock-example/1/shape> ;
-    cube:observationSet <https://mock.ld.admin.ch/cube/mock-example/1/ObservationSet> .
+    cube:observationConstraint <https://mock.ld.admin.ch/mock-example/1/shape> ;
+    cube:observationSet <https://mock.ld.admin.ch/mock-example/1/ObservationSet> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/ObservationSet> a cube:ObservationSet ;
-    cube:observation <https://mock.ld.admin.ch/cube/mock-example/1/observation/2000_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2000_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2001_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2001_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2002_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2002_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2003_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2003_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2004_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2004_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2005_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2005_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2006_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2006_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2007_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2007_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2008_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2008_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2009_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2009_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2010_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2010_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2011_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2011_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2012_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2012_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2013_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2013_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2014_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2014_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2015_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2015_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2016_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2016_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2017_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2017_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2018_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2018_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2019_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2019_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2020_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2020_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2021_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2021_Z%C3%BCrich>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2022_Bern>,
-        <https://mock.ld.admin.ch/cube/mock-example/1/observation/2022_Z%C3%BCrich> .
+<https://mock.ld.admin.ch/mock-example/1/ObservationSet> a cube:ObservationSet ;
+    cube:observation <https://mock.ld.admin.ch/mock-example/1/observation/2000_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2000_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2001_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2001_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2002_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2002_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2003_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2003_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2004_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2004_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2005_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2005_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2006_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2006_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2007_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2007_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2008_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2008_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2009_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2009_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2010_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2010_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2011_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2011_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2012_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2012_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2013_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2013_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2014_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2014_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2015_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2015_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2016_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2016_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2017_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2017_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2018_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2018_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2019_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2019_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2020_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2020_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2021_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2021_Z%C3%BCrich>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2022_Bern>,
+        <https://mock.ld.admin.ch/mock-example/1/observation/2022_Z%C3%BCrich> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2000_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2000_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.0 ;
+    mock:standardError "5.0"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 23.0 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "23.0"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2000> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2000_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2000_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 7.517863529610764 ;
+    mock:standardError "7.517863529610764"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 23.555744036232408 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "23.555744036232408"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2000> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2001_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2001_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 6.466524763963783 ;
+    mock:standardError "6.466524763963783"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 21.536090723505524 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "21.536090723505524"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2001> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2001_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2001_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 6.030296213104391 ;
+    mock:standardError "6.030296213104391"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 21.659924330021255 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "21.65992433002125"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2001> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2002_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2002_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 1.493504195537817 ;
+    mock:standardError "1.493504195537817"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 22.575144684250287 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "22.575144684250287"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2002> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2002_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2002_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.460656090931694 ;
+    mock:standardError "4.460656090931694"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 20.688211936144263 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "20.688211936144263"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2002> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2003_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2003_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 3.1225318830708093 ;
+    mock:standardError "3.1225318830708093"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 20.34210673843992 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "20.34210673843992"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2003> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2003_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2003_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 9.256702605801236 ;
+    mock:standardError "9.256702605801236"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 21.515733621541955 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "21.515733621541955"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2003> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2004_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2004_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.901117604444538 ;
+    mock:standardError "4.901117604444538"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 19.883669558588743 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "19.883669558588743"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2004> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2004_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2004_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 7.390939821011259 ;
+    mock:standardError "7.390939821011258"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 19.06703223788886 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "19.06703223788886"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2004> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2005_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2005_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 0.3648574303067509 ;
+    mock:standardError "0.3648574303067509"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 20.37741134479489 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "20.37741134479489"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2005> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2005_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2005_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.334716140807069 ;
+    mock:standardError "5.334716140807069"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 19.10206139418359 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "19.10206139418359"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2005> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2006_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2006_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 2.5205528663922094 ;
+    mock:standardError "2.520552866392209"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 17.851780950874087 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "17.851780950874087"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2006> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2006_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2006_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 9.574551975171314 ;
+    mock:standardError "9.574551975171314"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 19.16636437276704 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "19.16636437276704"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2006> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2007_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2007_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.873759639672014 ;
+    mock:standardError "4.873759639672014"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 18.32115832000203 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "18.321158320002034"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2007> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2007_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2007_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 7.127258811335302 ;
+    mock:standardError "7.127258811335302"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 16.70866751700804 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "16.70866751700804"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2007> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2008_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2008_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 0.9142998372297384 ;
+    mock:standardError "0.9142998372297384"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 17.89457243174931 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "17.89457243174931"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2008> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2008_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2008_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.510509430147336 ;
+    mock:standardError "4.510509430147336"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 17.518675046034367 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "17.518675046034367"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2008> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2009_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2009_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 3.6030273778709576 ;
+    mock:standardError "3.6030273778709576"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 15.644260115877954 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "15.644260115877954"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2009> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2009_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2009_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 8.255475397580657 ;
+    mock:standardError "8.255475397580657"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 16.57885415743719 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "16.57885415743719"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2009> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2010_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2010_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 6.403036956705559 ;
+    mock:standardError "6.403036956705559"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 16.67404534861387 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "16.67404534861387"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2010> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2010_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2010_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.41838925075702 ;
+    mock:standardError "5.41838925075702"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 14.658857249625616 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "14.658857249625616"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2010> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2011_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2011_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 2.7685586054789892 ;
+    mock:standardError "2.768558605478989"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 15.23952733205338 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "15.23952733205338"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2011> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2011_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2011_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 2.547974456080931 ;
+    mock:standardError "2.547974456080931"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 15.77006036400352 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "15.77006036400352"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2011> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2012_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2012_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.634558406905088 ;
+    mock:standardError "5.634558406905088"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 13.746463964437758 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "13.746463964437758"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2012> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2012_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2012_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 6.195609420937518 ;
+    mock:standardError "6.195609420937518"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 13.898790381464226 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "13.898790381464226"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2012> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2013_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2013_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 8.450009649429939 ;
+    mock:standardError "8.450009649429939"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 14.79423943661537 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "14.79423943661537"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2013> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2013_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2013_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 3.425280014313877 ;
+    mock:standardError "3.425280014313877"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 12.895269405129998 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "12.895269405129998"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2013> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2014_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2014_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.667912290722137 ;
+    mock:standardError "4.667912290722137"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 12.57895406130142 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "12.57895406130142"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2014> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2014_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2014_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 0.780391898961843 ;
+    mock:standardError "0.780391898961843"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 13.739824320879595 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "13.739824320879595"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2014> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2015_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2015_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 7.234991659001383 ;
+    mock:standardError "7.234991659001383"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 12.08858766109956 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "12.08858766109956"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2015> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2015_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2015_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.794358156286226 ;
+    mock:standardError "4.794358156286226"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 11.300664194959296 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "11.300664194959296"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2015> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2016_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2016_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 9.624032873046964 ;
+    mock:standardError "9.624032873046964"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 12.606317539212023 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "12.606317539212023"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2016> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2016_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2016_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 2.5019829145341275 ;
+    mock:standardError "2.5019829145341275"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 11.306186956398 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "11.306186956398"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2016> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2017_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2017_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.322003468934927 ;
+    mock:standardError "5.322003468934927"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 10.081257039139402 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "10.081257039139402"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2017> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2017_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2017_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 0.4085982816951822 ;
+    mock:standardError "0.4085982816951822"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 11.399522010793316 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "11.399522010793316"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2017> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2018_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2018_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 7.317046263544459 ;
+    mock:standardError "7.317046263544459"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 10.525901301404176 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "10.525901301404176"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2018> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2018_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2018_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.003684887934572 ;
+    mock:standardError "5.003684887934572"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 8.933378287580624 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "8.933378287580624"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2018> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2019_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2019_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 9.12751448116438 ;
+    mock:standardError "9.12751448116438"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 10.131078794353764 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "10.131078794353764"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2019> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2019_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2019_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 3.27575514766154 ;
+    mock:standardError "3.27575514766154"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 9.725396222849866 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "9.725396222849866"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2019> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2020_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2020_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 4.286464451069697 ;
+    mock:standardError "4.286464451069697"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 7.863975722345669 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "7.863975722345669"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2020> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2020_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2020_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 1.6851777638149157 ;
+    mock:standardError "1.6851777638149157"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 8.817539768108874 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "8.817539768108874"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2020> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2021_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2021_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.824977064184451 ;
+    mock:standardError "5.824977064184451"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "definitiv" ;
-    mock:value 8.883947915155796 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "8.883947915155796"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2021> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2021_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2021_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 6.681380029364922 ;
+    mock:standardError "6.681380029364922"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "definitiv" ;
-    mock:value 6.873745757485178 ;
+    mock:status "definitiv"^^xsd:string ;
+    mock:value "6.873745757485178"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2021> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2022_Bern> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2022_Bern> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 7.297772477326248 ;
+    mock:standardError "7.297772477326248"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/01> ;
-    mock:status "provisionally" ;
-    mock:value 7.479049116629595 ;
+    mock:status "provisionally"^^xsd:string ;
+    mock:value "7.479049116629595"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2022> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/observation/2022_Z%C3%BCrich> a cube:Observation ;
+<https://mock.ld.admin.ch/mock-example/1/observation/2022_Z%C3%BCrich> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ;
-    mock:standardError 5.220921715260017 ;
+    mock:standardError "5.220921715260017"^^xsd:float ;
     mock:station <https://mock.ld.admin.ch/station/02> ;
-    mock:status "provisionally" ;
-    mock:value 7.984094086903241 ;
+    mock:status "provisionally"^^xsd:string ;
+    mock:value "7.984094086903241"^^xsd:float ;
     mock:year <https://ld.admin.ch/time/year/2022> .
 
-<https://mock.ld.admin.ch/cube/mock-example/1/shape> a cube:Constraint ;
+<https://mock.ld.admin.ch/mock-example/1/shape> a sh:NodeShape,
+        cube:Constraint ;
     sh:closed true ;
     sh:property [ qudt:hasUnit unit:PERCENT ;
             qudt:scaleType qudt:RatioScale ;
-            schema1:description "Standardfehler des berechneten Werts"@de ;
-            schema1:name "Standardfehler"@de,
+            schema:description "Standardfehler des berechneten Werts"@de ;
+            schema:name "Standardfehler"@de,
                 "Standard error"@en,
                 "Erreur standard"@fr,
                 "Errore standard"@it ;
-            sh:max 9.624033e+00 ;
+            sh:datatype xsd:float ;
             sh:maxCount 1 ;
-            sh:min 3.648574e-01 ;
+            sh:maxInclusive "9.624032873046964"^^xsd:float ;
             sh:minCount 1 ;
+            sh:minInclusive "0.3648574303067509"^^xsd:float ;
             sh:nodeKind sh:Literal ;
             sh:path mock:standardError ;
             meta:dimensionRelation [ a relation:StandardError ;
                     meta:relatesTo mock:value ] ],
-        [ a cube:MeasureDimension ;
-            qudt:hasUnit unit:KiloGM ;
-            qudt:scaleType qudt:IntervalScale ;
-            schema1:description "Gemessener Wert an der Station"@de ;
-            schema1:name "Wert"@de,
-                "Value"@en,
-                "Valeur"@fr,
-                "Valore"@it ;
-            sh:max 2.355574e+01 ;
-            sh:maxCount 1 ;
-            sh:min 6.873746e+00 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:path mock:value ],
+        [ sh:in ( cube:Observation ) ;
+            sh:nodeKind sh:IRI ;
+            sh:path rdf:type ],
         [ a cube:KeyDimension ;
             qudt:scaleType qudt:NominalScale ;
-            schema1:description "Station der Untersuchung"@de ;
-            schema1:name "Station"@de,
+            schema:description "Station der Untersuchung"@de ;
+            schema:name "Station"@de,
                 "Station"@en,
                 "Station"@fr,
                 "Stazione"@it ;
+            sh:in ( <https://mock.ld.admin.ch/station/01> <https://mock.ld.admin.ch/station/02> ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:path mock:station ],
+        [ sh:in ( <https://register.ld.admin.ch/opendataswiss/org/office_of_Mock> ) ;
+            sh:nodeKind sh:IRI ;
+            sh:path cube:observedBy ],
+        [ a cube:MeasureDimension ;
+            qudt:hasUnit unit:KiloGM ;
+            qudt:scaleType qudt:IntervalScale ;
+            schema:description "Gemessener Wert an der Station"@de ;
+            schema:name "Wert"@de,
+                "Value"@en,
+                "Valeur"@fr,
+                "Valore"@it ;
+            sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:maxInclusive "23.555744036232408"^^xsd:float ;
+            sh:minCount 1 ;
+            sh:minInclusive "6.873745757485178"^^xsd:float ;
+            sh:nodeKind sh:Literal ;
+            sh:path mock:value ],
         [ qudt:scaleType qudt:NominalScale ;
-            schema1:description "Status der Veröffentlichung, provisorisch oder final"@de ;
-            schema1:name "Veröffentlichungsstatus"@de,
+            schema:description "Status der Veröffentlichung, provisorisch oder final"@de ;
+            schema:name "Veröffentlichungsstatus"@de,
                 "State of publication"@en,
                 "Statut de publication"@fr,
                 "Stato di pubblicazione"@it ;
+            sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:path mock:status ],
         [ a cube:KeyDimension ;
             qudt:scaleType qudt:OrdinalScale ;
-            schema1:description "Jahr der Erhebung"@de ;
-            schema1:name "Jahr"@de,
+            schema:description "Jahr der Erhebung"@de ;
+            schema:name "Jahr"@de,
                 "Year"@en,
                 "An"@fr,
                 "Anno"@it ;
+            sh:in ( <https://ld.admin.ch/time/year/2000> <https://ld.admin.ch/time/year/2001> <https://ld.admin.ch/time/year/2002> <https://ld.admin.ch/time/year/2003> <https://ld.admin.ch/time/year/2004> <https://ld.admin.ch/time/year/2005> <https://ld.admin.ch/time/year/2006> <https://ld.admin.ch/time/year/2007> <https://ld.admin.ch/time/year/2008> <https://ld.admin.ch/time/year/2009> <https://ld.admin.ch/time/year/2010> <https://ld.admin.ch/time/year/2011> <https://ld.admin.ch/time/year/2012> <https://ld.admin.ch/time/year/2013> <https://ld.admin.ch/time/year/2014> <https://ld.admin.ch/time/year/2015> <https://ld.admin.ch/time/year/2016> <https://ld.admin.ch/time/year/2017> <https://ld.admin.ch/time/year/2018> <https://ld.admin.ch/time/year/2019> <https://ld.admin.ch/time/year/2020> <https://ld.admin.ch/time/year/2021> <https://ld.admin.ch/time/year/2022> ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;

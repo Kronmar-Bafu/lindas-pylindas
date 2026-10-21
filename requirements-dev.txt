@@ -1,0 +1,26 @@
+# requirements-dev.txt
+#
+# Exact (==) pins for reproducible development and CI installs ("lock" file).
+# Install with: pip install -r requirements-dev.txt
+#
+# Note: the authoritative runtime dependencies (with lower-bound/compatible
+# ranges) live in pyproject.toml under [project.dependencies]. This file
+# records exact pins so that local dev and CI environments are reproducible,
+# and additionally includes the dev/test tooling needed by the unit-test
+# layer and lint job (pytest, hypothesis, ruff).
+
+# --- Runtime dependencies (exact pins, kept verbatim from requirements.txt) ---
+numpy==2.1.3
+pandas==2.2.3
+pyshacl==0.26.0
+pystardog==0.17.0
+PyYAML==6.0.2
+rdflib==7.0.0
+requests==2.32.3
+sparql-dataframe==0.4
+SPARQLWrapper==2.0.0
+
+# --- Dev / test tooling ---
+pytest>=8.0
+hypothesis>=6.100
+ruff>=0.6

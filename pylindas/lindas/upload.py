@@ -1,4 +1,3 @@
-import requests
 import stardog
 from configparser import ConfigParser
 from typing import Union

@@ -171,3 +171,8 @@ cython_debug/
 
 # VSCode
 .vscode
+# Kiro (local only)
+.kiro/
+
+# Ruff cache
+.ruff_cache/
