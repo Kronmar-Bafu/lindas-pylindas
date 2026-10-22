@@ -1,7 +1,5 @@
 from pylindas.pyshareddimension import SharedDimension
-from rdflib import Graph
 import pandas as pd
-import pytest
 import yaml
 
 class TestClass:

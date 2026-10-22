@@ -10,8 +10,9 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, Any, List
-from jsonschema import Draft202012Validator, validate
-from jsonschema.exceptions import ValidationError
+from jsonschema import Draft202012Validator
+
+from pylindas.lindas.paths import reject_traversal
 
 import logging
 
@@ -198,9 +199,11 @@ class DataEuropaFetcher(object):
 
         metadata = self._extract_metadata(data)
 
-        data_csv_filename = os.path.join(output_dir, 'data.csv')
-        description_json_filename = os.path.join(output_dir, 'description.json')
-        frictionless_json_filename = os.path.join(output_dir, 'frictionless.json')
+        output_base = output_dir if output_dir else os.getcwd()
+        reject_traversal(output_base)
+        data_csv_filename = os.path.join(output_base, 'data.csv')
+        description_json_filename = os.path.join(output_base, 'description.json')
+        frictionless_json_filename = os.path.join(output_base, 'frictionless.json')
 
         distributions = self._get_distributions(data['result']['distributions'])
 
@@ -218,7 +221,7 @@ class DataEuropaFetcher(object):
         description = self._transform_metadata(metadata, distributions['frictionless'])
         schema_path = os.path.relpath(
             description_schema_path,
-            start=os.path.join(os.getcwd(), output_dir)
+            start=output_base
         )
         description = {
             "$schema": f"{schema_path}",
@@ -248,12 +251,14 @@ python cli.py serialize {output_dir} {os.path.join(output_dir, 'cube.ttl')}"""
 
 
 def fetch(input_url: str, output_dir: str):
-    # create the output dir if it does not exist
-    if output_dir and not os.path.exists(output_dir):
-        os.makedirs(output_dir, exist_ok=True)
+    # create the output dir if it does not exist, rejecting traversal first
+    if output_dir:
+        reject_traversal(output_dir)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir, exist_ok=True)
 
     if input_url.startswith('https://data.europa.eu'):
         fetcher = DataEuropaFetcher()
         fetcher.fetch_dataset(input_url, output_dir)
     else:
-        raise ValueError(f'Only supporting datasets from data.europa.eu at the moment, make sure your input URL starts with https://data.europa.eu')
+        raise ValueError('Only supporting datasets from data.europa.eu at the moment, make sure your input URL starts with https://data.europa.eu')

@@ -14,13 +14,23 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 keywords = ["linked data", "LINDAS", "cubes", "RDF"]
-requires-python = ">=3.10.11"
-dynamic = ["dependencies"]
-[tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=2.1.3",
+    "pandas>=2.2.3",
+    "pyshacl>=0.26.0",
+    "pystardog>=0.17.0",
+    "PyYAML>=6.0.2",
+    "rdflib>=7.0.0",  # verified graph-isomorphic through 7.1.4 for all example cubes (mock/biotope/airport, timestamps excluded); lower bound retained, newer rdflib OK
+    "requests>=2.32.3",
+    "sparql-dataframe>=0.4",
+    "SPARQLWrapper>=2.0.0",
+    "jsonschema>=4.0.0",
+    "shapely>=2.0.0",
+]
 
 [project.urls]
-Homepage = "https://github.com/Kronmar-Bafu/py-cube"
+Homepage = "https://github.com/Kronmar-Bafu/lindas-pylindas"  
 
 [project.scripts]
 pycube = "pylindas.cli:main"
@@ -35,3 +45,6 @@ post_commit_hook = ""
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
 "pylindas/__init__.py" = ["{version}"]
+
+[tool.ruff.lint]
+select = ["F"]

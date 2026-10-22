@@ -3,7 +3,6 @@ import yaml
 import os
 
 from pylindas.pycube import Cube
-from pylindas.lindas.namespaces import SCHEMA
 
 ENVIRONMENT = os.getenv("CI_ENVIRONMENT_NAME")
 

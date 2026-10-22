@@ -1,4 +1,4 @@
-@prefix biotop: <https://environment.ld.admin.ch/foen/biotopes> .
+@prefix biotop: <https://environment.ld.admin.ch/foen/biotopes/> .
 @prefix cube: <https://cube.link/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dct: <http://purl.org/dc/terms/> .
@@ -10,8 +10,9 @@
 @prefix unit: <http://qudt.org/vocab/unit/> .
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1> a void:Dataset,
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1> a void:Dataset,
         schema:Dataset,
         dcat:Dataset,
         cube:Cube ;
@@ -19,14 +20,14 @@
     dct:creator <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
     dct:identifier "UZ-2404" ;
     schema:contactPoint [ a schema:ContactPoint ;
-            schema:email "info@bafu.admin.ch"^^<http://www.w3.org/2001/XMLSchema#string> ;
-            schema:name "Bundesamt für Umwelt"^^<http://www.w3.org/2001/XMLSchema#string> ] ;
+            schema:email "info@bafu.admin.ch"^^xsd:string ;
+            schema:name "Bundesamt für Umwelt"^^xsd:string ] ;
     schema:contributor <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
     schema:creativeWorkStatus <https://ld.admin.ch/vocabulary/CreativeWorkStatus/Draft> ;
     schema:creator <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    schema:dateCreated "2024-01-16"^^<http://www.w3.org/2001/XMLSchema#date> ;
-    schema:dateModified "2025-02-11T12:17:57+00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-    schema:datePublished "2025-02-11"^^<http://www.w3.org/2001/XMLSchema#date> ;
+    schema:dateCreated "2024-01-16"^^xsd:date ;
+    schema:dateModified "2026-10-21T09:25:05+00:00"^^xsd:dateTime ;
+    schema:datePublished "2026-10-21"^^xsd:date ;
     schema:description "Die fünf Biotopinventare Hoch- und Flachmoore, Auen, Amphibienlaichgebiete und Trockenwiesen/-weiden im Überblick"@de,
         "Die fünf Biotopinventare Hoch- und Flachmoore, Auen, Amphibienlaichgebiete und Trockenwiesen/-weiden im Überblick"@en,
         "Vue d’ensemble des cinq inventaires de biotopes - hauts-marais, bas-marais, zones alluviales, sites de reproduction de batraciens ainsi que prairies et pâturages secs"@fr,
@@ -39,220 +40,165 @@
     schema:version 1 ;
     schema:workExample <https://ld.admin.ch/application/visualize> ;
     dcat:contactPoint [ a vcard:Organization ;
-            vcard:fn "Bundesamt für Umwelt"^^<http://www.w3.org/2001/XMLSchema#string> ;
-            vcard:hasEmail "info@bafu.admin.ch"^^<http://www.w3.org/2001/XMLSchema#string> ] ;
-    cube:observationConstraint <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/shape> ;
-    cube:observationSet <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/ObservationSet> .
+            vcard:fn "Bundesamt für Umwelt"^^xsd:string ;
+            vcard:hasEmail "info@bafu.admin.ch"^^xsd:string ] ;
+    cube:observationConstraint <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/shape> ;
+    cube:observationSet <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/ObservationSet> .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/ObservationSet> a cube:ObservationSet ;
-    cube:observation <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Amphibienlaichgebiete_Mit%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Amphibienlaichgebiete_Ohne%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Auengebiete_Mit%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Auengebiete_Ohne%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Biotope_Mit%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Biotope_Ohne%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Flachmoore_Mit%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Flachmoore_Ohne%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Mit%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Ohne%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Mit%20%C3%9Cberlappung>,
-        <https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Ohne%20%C3%9Cberlappung> .
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/ObservationSet> a cube:ObservationSet ;
+    cube:observation <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Amphibienlaichgebiete_Mit%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Amphibienlaichgebiete_Ohne%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Auengebiete_Mit%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Auengebiete_Ohne%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Biotope_Mit%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Biotope_Ohne%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Flachmoore_Mit%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Flachmoore_Ohne%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Mit%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Ohne%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Mit%20%C3%9Cberlappung>,
+        <https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Ohne%20%C3%9Cberlappung> .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Amphibienlaichgebiete_Mit%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Amphibienlaichgebiete_Mit%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "21670.9"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "21.3"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.52"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "21670.9"^^xsd:float ;
+    biotop:area_of_biotopes "21.3"^^xsd:float ;
+    biotop:area_of_switzerland "0.52"^^xsd:float ;
     biotop:count 929 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/1> ;
-    biotop:ratio_of_objects "13.1"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/4> .
+    biotop:ratio_of_objects "13.1"^^xsd:float ;
+    biotop:type biotop:4 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Amphibienlaichgebiete_Ohne%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Amphibienlaichgebiete_Ohne%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "14847.6"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "15.9"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.36"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "14847.6"^^xsd:float ;
+    biotop:area_of_biotopes "15.9"^^xsd:float ;
+    biotop:area_of_switzerland "0.36"^^xsd:float ;
     biotop:count 929 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/2> ;
-    biotop:ratio_of_objects "13.1"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/4> .
+    biotop:ratio_of_objects "13.1"^^xsd:float ;
+    biotop:type biotop:4 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Auengebiete_Mit%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Auengebiete_Mit%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "27844.5"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "27.3"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.67"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "27844.5"^^xsd:float ;
+    biotop:area_of_biotopes "27.3"^^xsd:float ;
+    biotop:area_of_switzerland "0.67"^^xsd:float ;
     biotop:count 326 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/1> ;
-    biotop:ratio_of_objects "4.6"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/3> .
+    biotop:ratio_of_objects "4.6"^^xsd:float ;
+    biotop:type biotop:3 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Auengebiete_Ohne%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Auengebiete_Ohne%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "26416.9"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "28.2"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.64"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "26416.9"^^xsd:float ;
+    biotop:area_of_biotopes "28.2"^^xsd:float ;
+    biotop:area_of_switzerland "0.64"^^xsd:float ;
     biotop:count 326 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/2> ;
-    biotop:ratio_of_objects "4.6"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/3> .
+    biotop:ratio_of_objects "4.6"^^xsd:float ;
+    biotop:type biotop:3 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Biotope_Mit%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Biotope_Mit%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "101864.9"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "100.0"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "2.47"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "101864.9"^^xsd:float ;
+    biotop:area_of_biotopes "100.0"^^xsd:float ;
+    biotop:area_of_switzerland "2.47"^^xsd:float ;
     biotop:count 7092 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/1> ;
-    biotop:ratio_of_objects "100.0"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/tot> .
+    biotop:ratio_of_objects "100.0"^^xsd:float ;
+    biotop:type biotop:tot .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Biotope_Ohne%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Biotope_Ohne%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "93607.6"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "100.0"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "2.27"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "93607.6"^^xsd:float ;
+    biotop:area_of_biotopes "100.0"^^xsd:float ;
+    biotop:area_of_switzerland "2.27"^^xsd:float ;
     biotop:count 7092 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/2> ;
-    biotop:ratio_of_objects "100.0"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/tot> .
+    biotop:ratio_of_objects "100.0"^^xsd:float ;
+    biotop:type biotop:tot .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Flachmoore_Mit%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Flachmoore_Mit%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "22501.4"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "22.1"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.54"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "22501.4"^^xsd:float ;
+    biotop:area_of_biotopes "22.1"^^xsd:float ;
+    biotop:area_of_switzerland "0.54"^^xsd:float ;
     biotop:count 1335 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/1> ;
-    biotop:ratio_of_objects "18.8"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/2> .
+    biotop:ratio_of_objects "18.8"^^xsd:float ;
+    biotop:type biotop:2 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Flachmoore_Ohne%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Flachmoore_Ohne%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "22495.0"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "24.0"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.54"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "22495.0"^^xsd:float ;
+    biotop:area_of_biotopes "24.0"^^xsd:float ;
+    biotop:area_of_switzerland "0.54"^^xsd:float ;
     biotop:count 1335 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/2> ;
-    biotop:ratio_of_objects "18.8"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/2> .
+    biotop:ratio_of_objects "18.8"^^xsd:float ;
+    biotop:type biotop:2 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Mit%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Mit%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "1567.5"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "1.5"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.04"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "1567.5"^^xsd:float ;
+    biotop:area_of_biotopes "1.5"^^xsd:float ;
+    biotop:area_of_switzerland "0.04"^^xsd:float ;
     biotop:count 551 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/1> ;
-    biotop:ratio_of_objects "7.8"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/1> .
+    biotop:ratio_of_objects "7.8"^^xsd:float ;
+    biotop:type biotop:1 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Ohne%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Hochmoore%20%28Typen%20I%20%2B%20II%29_Ohne%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "1567.5"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "1.7"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.04"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "1567.5"^^xsd:float ;
+    biotop:area_of_biotopes "1.7"^^xsd:float ;
+    biotop:area_of_switzerland "0.04"^^xsd:float ;
     biotop:count 551 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/2> ;
-    biotop:ratio_of_objects "7.8"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/1> .
+    biotop:ratio_of_objects "7.8"^^xsd:float ;
+    biotop:type biotop:1 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Mit%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Mit%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "28280.6"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "27.8"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.68"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "28280.6"^^xsd:float ;
+    biotop:area_of_biotopes "27.8"^^xsd:float ;
+    biotop:area_of_switzerland "0.68"^^xsd:float ;
     biotop:count 3951 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/1> ;
-    biotop:ratio_of_objects "55.7"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/5> .
+    biotop:ratio_of_objects "55.7"^^xsd:float ;
+    biotop:type biotop:5 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Ohne%20%C3%9Cberlappung> a cube:Observation ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/observation/Trockenwiesen%20und%20-weiden_Ohne%20%C3%9Cberlappung> a cube:Observation ;
     cube:observedBy <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ;
-    biotop:area "28280.6"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_biotopes "30.2"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:area_of_switzerland "0.68"^^<http://www.w3.org/2001/XMLSchema#float> ;
+    biotop:area "28280.6"^^xsd:float ;
+    biotop:area_of_biotopes "30.2"^^xsd:float ;
+    biotop:area_of_switzerland "0.68"^^xsd:float ;
     biotop:count 3951 ;
     biotop:overlap <https://environment.ld.admin.ch/foen/overlapping/2> ;
-    biotop:ratio_of_objects "55.7"^^<http://www.w3.org/2001/XMLSchema#float> ;
-    biotop:type <https://environment.ld.admin.ch/foen/biotopes/5> .
+    biotop:ratio_of_objects "55.7"^^xsd:float ;
+    biotop:type biotop:5 .
 
-<https://environment.ld.admin.ch/foen/biotopescube/UZ-2404/1/shape> a cube:Constraint ;
+<https://environment.ld.admin.ch/foen/biotopes/UZ-2404/1/shape> a sh:NodeShape,
+        cube:Constraint ;
     sh:closed true ;
-    sh:property [ a cube:MeasureDimension ;
-            qudt:hasUnit unit:PERCENT ;
-            qudt:scaleType qudt:RatioScale ;
-            schema:description "Anteil der Objekte an der Gesamtfläche der Schweiz"@de ;
-            schema:name "Anteil CH-Fläche"@de,
-                "Anteil CH-Fläche"@en,
-                "Anteil CH-Fläche"@fr,
-                "Anteil CH-Fläche"@it ;
-            sh:max 2.47e+00 ;
-            sh:maxCount 1 ;
-            sh:min 4e-02 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:path biotop:area_of_switzerland ],
-        [ a cube:MeasureDimension ;
-            qudt:hasUnit unit:PERCENT ;
-            qudt:scaleType qudt:RatioScale ;
-            schema:description "Anteil der Objekte an Gesamtmenge der Biotope"@de ;
-            schema:name "Anteil der CH-Biotope"@de,
-                "Anteil der CH-Biotope"@en,
-                "Anteil der CH-Biotope"@fr,
-                "Anteil der CH-Biotope"@it ;
-            sh:max 1e+02 ;
-            sh:maxCount 1 ;
-            sh:min 4.6e+00 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:path biotop:ratio_of_objects ],
-        [ a cube:MeasureDimension ;
-            qudt:hasUnit unit:PERCENT ;
-            qudt:scaleType qudt:RatioScale ;
-            schema:description "Anteil der Objekte an der Gesamtfläche aller Objekte in der Biotopstatistik"@de ;
-            schema:name "Anteil der CH-Biotope (Fläche)"@de,
-                "Anteil der CH-Biotope (Fläche)"@en,
-                "Anteil der CH-Biotope (Fläche)"@fr,
-                "Anteil der CH-Biotope (Fläche)"@it ;
-            sh:max 1e+02 ;
-            sh:maxCount 1 ;
-            sh:min 1.5e+00 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:path biotop:area_of_biotopes ],
-        [ a cube:KeyDimension ;
+    sh:property [ a cube:KeyDimension ;
             qudt:scaleType qudt:NominalScale ;
             schema:description "Die Art des Biotopes nach denen in der Biotopstatistik unterschieden wird"@de ;
             schema:name "Art des Biotops"@de,
                 "Art des Biotops"@en,
                 "Art des Biotops"@fr,
                 "Art des Biotops"@it ;
-            sh:in ( <https://environment.ld.admin.ch/foen/biotopes/1> <https://environment.ld.admin.ch/foen/biotopes/2> <https://environment.ld.admin.ch/foen/biotopes/3> <https://environment.ld.admin.ch/foen/biotopes/4> <https://environment.ld.admin.ch/foen/biotopes/5> <https://environment.ld.admin.ch/foen/biotopes/tot> ) ;
+            sh:in ( biotop:1 biotop:2 biotop:3 biotop:4 biotop:5 biotop:tot ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:path biotop:type ;
             meta:inHierarchy [ a meta:Hierarchy ;
                     schema:name "Biotope" ;
-                    meta:hierarchyRoot <https://environment.ld.admin.ch/foen/biotopes/tot> ;
+                    meta:hierarchyRoot biotop:tot ;
                     meta:nextInHierarchy [ schema:name "Biotoparten" ;
                             sh:path schema:hasPart ] ] ],
-        [ a cube:MeasureDimension ;
-            qudt:hasUnit unit:HA ;
-            qudt:scaleType qudt:RatioScale ;
-            schema:description "Summe der Flächen der Objekte"@de ;
-            schema:name "Fläche der Objekte"@de,
-                "Fläche der Objekte"@en,
-                "Fläche der Objekte"@fr,
-                "Fläche der Objekte"@it ;
-            sh:max 1.018649e+05 ;
-            sh:maxCount 1 ;
-            sh:min 1.5675e+03 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:path biotop:area ],
         [ a cube:KeyDimension ;
             qudt:scaleType qudt:NominalScale ;
             schema:description "Die Fläche kann einzeln pro Objekt oder überlappend betrachtet werden."@de ;
@@ -265,6 +211,39 @@
             sh:minCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:path biotop:overlap ],
+        [ sh:in ( <https://register.ld.admin.ch/opendataswiss/org/bundesamt-fur-umwelt-bafu> ) ;
+            sh:nodeKind sh:IRI ;
+            sh:path cube:observedBy ],
+        [ a cube:MeasureDimension ;
+            qudt:hasUnit unit:PERCENT ;
+            qudt:scaleType qudt:RatioScale ;
+            schema:description "Anteil der Objekte an der Gesamtfläche der Schweiz"@de ;
+            schema:name "Anteil CH-Fläche"@de,
+                "Anteil CH-Fläche"@en,
+                "Anteil CH-Fläche"@fr,
+                "Anteil CH-Fläche"@it ;
+            sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:maxInclusive "2.47"^^xsd:float ;
+            sh:minCount 1 ;
+            sh:minInclusive "0.04"^^xsd:float ;
+            sh:nodeKind sh:Literal ;
+            sh:path biotop:area_of_switzerland ],
+        [ a cube:MeasureDimension ;
+            qudt:hasUnit unit:PERCENT ;
+            qudt:scaleType qudt:RatioScale ;
+            schema:description "Anteil der Objekte an Gesamtmenge der Biotope"@de ;
+            schema:name "Anteil der CH-Biotope"@de,
+                "Anteil der CH-Biotope"@en,
+                "Anteil der CH-Biotope"@fr,
+                "Anteil der CH-Biotope"@it ;
+            sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:maxInclusive "100.0"^^xsd:float ;
+            sh:minCount 1 ;
+            sh:minInclusive "4.6"^^xsd:float ;
+            sh:nodeKind sh:Literal ;
+            sh:path biotop:ratio_of_objects ],
         [ a cube:MeasureDimension ;
             qudt:hasUnit unit:UNITLESS ;
             qudt:scaleType qudt:RatioScale ;
@@ -273,10 +252,44 @@
                 "Anzahl Objekte"@en,
                 "Anzahl Objekte"@fr,
                 "Anzahl Objekte"@it ;
-            sh:max "7092" ;
+            sh:datatype xsd:integer ;
             sh:maxCount 1 ;
-            sh:min "326" ;
+            sh:maxInclusive 7092 ;
             sh:minCount 1 ;
+            sh:minInclusive 326 ;
             sh:nodeKind sh:Literal ;
-            sh:path biotop:count ] .
+            sh:path biotop:count ],
+        [ a cube:MeasureDimension ;
+            qudt:hasUnit unit:HA ;
+            qudt:scaleType qudt:RatioScale ;
+            schema:description "Summe der Flächen der Objekte"@de ;
+            schema:name "Fläche der Objekte"@de,
+                "Fläche der Objekte"@en,
+                "Fläche der Objekte"@fr,
+                "Fläche der Objekte"@it ;
+            sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:maxInclusive "101864.9"^^xsd:float ;
+            sh:minCount 1 ;
+            sh:minInclusive "1567.5"^^xsd:float ;
+            sh:nodeKind sh:Literal ;
+            sh:path biotop:area ],
+        [ sh:in ( cube:Observation ) ;
+            sh:nodeKind sh:IRI ;
+            sh:path rdf:type ],
+        [ a cube:MeasureDimension ;
+            qudt:hasUnit unit:PERCENT ;
+            qudt:scaleType qudt:RatioScale ;
+            schema:description "Anteil der Objekte an der Gesamtfläche aller Objekte in der Biotopstatistik"@de ;
+            schema:name "Anteil der CH-Biotope (Fläche)"@de,
+                "Anteil der CH-Biotope (Fläche)"@en,
+                "Anteil der CH-Biotope (Fläche)"@fr,
+                "Anteil der CH-Biotope (Fläche)"@it ;
+            sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:maxInclusive "100.0"^^xsd:float ;
+            sh:minCount 1 ;
+            sh:minInclusive "1.5"^^xsd:float ;
+            sh:nodeKind sh:Literal ;
+            sh:path biotop:area_of_biotopes ] .
 

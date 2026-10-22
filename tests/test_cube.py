@@ -1,6 +1,5 @@
 from pylindas.lindas.namespaces import SCHEMA
 from pylindas.pycube import Cube
-from rdflib import Graph
 import pandas as pd
 import pytest
 import yaml
@@ -54,6 +53,11 @@ class TestClass:
             self.mock_cube.serialize("faulty_test_standard_error.ttl")
         assert bool(result)
 
+    @pytest.mark.xfail(
+        reason="Mock cube has no upperUncertainty dimension; needs the co2 "
+        "emission cube (see todo). Query drafted but not yet satisfiable.",
+        strict=True,
+    )
     def test_upper_uncertainty(self):
         # todo: include the co2 emission cube
         sparql = (
@@ -73,9 +77,14 @@ class TestClass:
             "}"
         )
 
-        # result = self.cube._graph.query(sparql)
-        assert True
+        result = self.mock_cube._graph.query(sparql)
+        assert bool(result)
 
+    @pytest.mark.xfail(
+        reason="Mock cube has no lowerUncertainty dimension; needs the co2 "
+        "emission cube (see todo). Query drafted but not yet satisfiable.",
+        strict=True,
+    )
     def test_lower_uncertainty(self):
         # todo: include the co2 emission cube
         sparql = (
@@ -96,8 +105,8 @@ class TestClass:
             "}"
         )
 
-        # result = self.cube._graph.query(sparql)
-        assert True
+        result = self.mock_cube._graph.query(sparql)
+        assert bool(result)
 
     def test_point_limit(self):
         sparql = (

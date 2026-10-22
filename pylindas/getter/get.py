@@ -1,4 +1,3 @@
-import pandas as pd
 import sparql_dataframe
 from SPARQLWrapper import SPARQLWrapper, JSON
 

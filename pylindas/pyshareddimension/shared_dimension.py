@@ -1,8 +1,6 @@
 import re
 from urllib.parse import quote
 from rdflib import BNode, Graph, Literal, RDF, URIRef, XSD
-from rdflib.collection import Collection
-from datetime import datetime, timezone
 try:
     from typing import Self
 except ImportError:
@@ -10,12 +8,20 @@ except ImportError:
     from typing import TypeVar
     Self = TypeVar("Self", bound="SharedDimension")
 import pandas as pd
-import numbers
-import sys
 
-from pylindas.lindas.namespaces import *
+from pylindas.lindas.namespaces import (
+    CUBE,
+    DCT,
+    META,
+    Namespaces,
+    QUDT,
+    SCHEMA,
+    SD_MD,
+    SH,
+)
 from pylindas.lindas.query import query_lindas
-from pyshacl import validate, errors
+from pylindas.lindas.exceptions import SharedDimensionAlreadyExistsError
+from pyshacl import validate
 
 class SharedDimension:
     _sd_uri: URIRef # Note: Shared Dimension usually do not have a trailing "/" in there URL
@@ -146,7 +152,7 @@ class SharedDimension:
         if not local:
             query = f"ASK {{ <{sd_uri}> ?p ?o}}"
             if query_lindas(query, environment=environment) == True:
-                sys.exit("Shared Dimension already exists! Please update your yaml")
+                raise SharedDimensionAlreadyExistsError(sd_uri)
 
         self._sd_dict = sd_yaml
         self._sd_uri = URIRef(sd_uri)
