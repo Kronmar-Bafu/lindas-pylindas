@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pylindas"
-version = "0.6.6"
+version = "1.0.0"
 description = "Utilities for working with the linked data service LINDAS of the Swiss Federal Administration. Includes modules for working with cubes."
 readme = "README.md"
 authors = [{ name = "Marco Kronenberg", email="marco.kronenberg@bafu.admin.ch" }]
@@ -36,7 +36,7 @@ Homepage = "https://github.com/Kronmar-Bafu/lindas-pylindas"
 pycube = "pylindas.cli:main"
 
 [tool.bumpver]
-current_version = "0.6.6"
+current_version = "1.0.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 pre_commit_hook = ""

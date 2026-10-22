@@ -13,4 +13,4 @@ __all__ = [
     "query_lindas",
 ]
 
-__version__ = "0.6.6"
+__version__ = "1.0.0"
