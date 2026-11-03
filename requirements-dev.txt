@@ -15,7 +15,7 @@ pandas==2.2.3
 pyshacl==0.26.0
 PyYAML==6.0.2
 rdflib==7.0.0
-requests==2.32.3
+requests==2.33.0
 sparql-dataframe==0.4
 SPARQLWrapper==2.0.0
 jsonschema==4.23.0
