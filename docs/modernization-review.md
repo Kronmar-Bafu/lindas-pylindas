@@ -95,8 +95,8 @@ High-value unit tests to add:
 
 Other gaps:
 - `tests/test_lindas.py` is an empty stub (single `pass`).
-- `pylindas/lindas/upload.py` and `query.py` untested (need mocking of stardog /
-  SPARQL endpoints).
+- `pylindas/lindas/upload.py` and `query.py` untested (need mocking of the
+  GraphDB Graph Store HTTP endpoint / SPARQL endpoints).
 
 ## 4. Suggested order of work
 

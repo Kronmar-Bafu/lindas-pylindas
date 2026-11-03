@@ -68,7 +68,7 @@ A `lindas.ini` file is read for this step, containing these information as well 
 
 ```
 [TEST]
-endpoint=https://stardog-test.cluster.ldbar.ch
+endpoint=https://graphdb.test.cz-aws.net/repositories/lindas/rdf-graphs/service
 username=a-lindas-user-name
 password=something-you-don't-need-to-see;)
 ```
