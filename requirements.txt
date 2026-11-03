@@ -6,3 +6,5 @@ rdflib==7.0.0
 requests==2.32.3
 sparql-dataframe==0.4
 SPARQLWrapper==2.0.0
+jsonschema==4.0.0
+shapely==2.0.0
