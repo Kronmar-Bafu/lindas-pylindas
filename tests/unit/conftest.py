@@ -17,8 +17,9 @@ Every unit test runs with an autouse fixture that:
      ``False`` so existence checks behave as "resource does not exist".
    * ``SPARQLWrapper.SPARQLWrapper`` so ``query.py`` cannot open a connection
      even if called directly.
-   * ``stardog.Connection`` so ``upload.py`` cannot connect (guarded by import
-     availability).
+   * the HTTP verbs in ``pylindas.lindas.upload.requests`` (GraphDB uploads use
+     the SPARQL 1.1 Graph Store HTTP Protocol) so ``upload.py`` cannot reach a
+     live endpoint.
 
 Individual tests can override the ``query_lindas`` behavior (e.g. to simulate
 "resource exists") with their own ``monkeypatch``/``unittest.mock`` setup;
@@ -76,11 +77,16 @@ def _no_network(monkeypatch):
     except ImportError:
         pass
 
-    # 4. Mock stardog.Connection so upload.py cannot connect (if importable).
+    # 4. Mock the HTTP verbs used by upload.py (GraphDB Graph Store Protocol)
+    #    so it cannot reach a live endpoint. Patched on the module-local
+    #    ``requests`` reference bound in upload.py.
     try:
-        import stardog as _stardog
+        from pylindas.lindas import upload as _upload
 
-        monkeypatch.setattr(_stardog, "Connection", MagicMock(), raising=False)
+        for _verb in ("post", "put", "delete", "get"):
+            monkeypatch.setattr(
+                _upload.requests, _verb, MagicMock(), raising=False
+            )
     except ImportError:
         pass
 
